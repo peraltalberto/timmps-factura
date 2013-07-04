@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="515.0" prefHeight="564.0" prefWidth="600.0000999999975" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="es.timmps.fac.gui.controlers.MarcoControllerFX">
+  <children>
+    <MenuBar id="Menu" layoutY="0.0" minHeight="14.0" prefHeight="21.0" prefWidth="601.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Close" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Delete" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <ToolBar id="herramientas" layoutY="20.0" minHeight="22.0" prefHeight="31.0" prefWidth="600.0000999999975" AnchorPane.leftAnchor="0.5" AnchorPane.rightAnchor="-0.5">
+      <items>
+        <Button mnemonicParsing="false" text="Button" />
+      </items>
+    </ToolBar>
+    <SplitPane id="spliter" dividerPositions="0.2003338563716442" focusTraversable="true" prefHeight="470.0" prefWidth="601.0000999999975" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="51.0">
+      <items>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="200.0">
+          <children>
+            <Accordion minWidth="122.0" prefHeight="468.0" prefWidth="147.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+              <expandedPane>
+                <TitledPane fx:id="x1" animated="false" minWidth="121.0" prefHeight="325.0" prefWidth="121.0" text="Comunes">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="112.0" />
+                  </content>
+                </TitledPane>
+              </expandedPane>
+              <panes>
+                <TitledPane animated="false" text="Almacen">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" text="Facturación">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <fx:reference source="x1" />
+              </panes>
+            </Accordion>
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="452.0" prefWidth="477.0">
+          <children>
+            <TabPane prefHeight="468.0" prefWidth="477.0" rotateGraphic="false" side="BOTTOM" tabClosingPolicy="SELECTED_TAB" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <tabs>
+                <Tab text="Untitled Tab 1">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="421.0" prefWidth="477.0" />
+                  </content>
+                </Tab>
+                <Tab text="Untitled Tab 2">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+    <AnchorPane id="estado" prefHeight="46.0" prefWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <SplitMenuButton mnemonicParsing="false" text="SplitMenuButton" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </SplitMenuButton>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="399.0001220703125" text="Probatina final" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="163.0" AnchorPane.rightAnchor="38.0" />
+        <ProgressIndicator progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="14.0" />
+      </children>
+    </AnchorPane>
+  </children>
+  <stylesheets>
+    <URL value="@css/marco_fx.css" />
+  </stylesheets>
+</AnchorPane>
