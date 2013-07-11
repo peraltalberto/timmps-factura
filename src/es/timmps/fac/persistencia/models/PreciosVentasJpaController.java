@@ -4,20 +4,17 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.Articulos;
-import es.timmps.fac.persistencia.pojos.Clientes;
-import es.timmps.fac.persistencia.pojos.PreciosVentas;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.Articulos;
+import es.timmps.fac.persistencia.Clientes;
+import es.timmps.fac.persistencia.PreciosVentas;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -25,11 +22,9 @@ import javax.transaction.UserTransaction;
  */
 public class PreciosVentasJpaController implements Serializable {
 
-    public PreciosVentasJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public PreciosVentasJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -190,9 +185,7 @@ public class PreciosVentasJpaController implements Serializable {
     private List<PreciosVentas> findPreciosVentasEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(PreciosVentas.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from PreciosVentas as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -215,10 +208,7 @@ public class PreciosVentasJpaController implements Serializable {
     public int getPreciosVentasCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<PreciosVentas> rt = cq.from(PreciosVentas.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from PreciosVentas as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

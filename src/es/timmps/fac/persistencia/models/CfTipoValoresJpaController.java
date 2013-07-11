@@ -4,25 +4,22 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfProdCustomEmp;
+import es.timmps.fac.persistencia.CfProdCustomEmp;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.CfProvPedCustomEmp;
-import es.timmps.fac.persistencia.pojos.CfGlobal;
-import es.timmps.fac.persistencia.pojos.CfProvAlbCustomEmp;
-import es.timmps.fac.persistencia.pojos.CfProvFacCustomEmp;
-import es.timmps.fac.persistencia.pojos.CfTipoValores;
+import es.timmps.fac.persistencia.CfProvPedCustomEmp;
+import es.timmps.fac.persistencia.CfGlobal;
+import es.timmps.fac.persistencia.CfProvAlbCustomEmp;
+import es.timmps.fac.persistencia.CfProvFacCustomEmp;
+import es.timmps.fac.persistencia.CfTipoValores;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -30,11 +27,9 @@ import javax.transaction.UserTransaction;
  */
 public class CfTipoValoresJpaController implements Serializable {
 
-    public CfTipoValoresJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CfTipoValoresJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -384,9 +379,7 @@ public class CfTipoValoresJpaController implements Serializable {
     private List<CfTipoValores> findCfTipoValoresEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CfTipoValores.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CfTipoValores as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -409,10 +402,7 @@ public class CfTipoValoresJpaController implements Serializable {
     public int getCfTipoValoresCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CfTipoValores> rt = cq.from(CfTipoValores.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CfTipoValores as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

@@ -4,19 +4,16 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
-import es.timmps.fac.persistencia.pojos.Contadores;
+import es.timmps.fac.persistencia.Contadores;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Empresas;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -24,11 +21,9 @@ import javax.transaction.UserTransaction;
  */
 public class ContadoresJpaController implements Serializable {
 
-    public ContadoresJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ContadoresJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -138,9 +133,7 @@ public class ContadoresJpaController implements Serializable {
     private List<Contadores> findContadoresEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Contadores.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Contadores as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -163,10 +156,7 @@ public class ContadoresJpaController implements Serializable {
     public int getContadoresCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Contadores> rt = cq.from(Contadores.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Contadores as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

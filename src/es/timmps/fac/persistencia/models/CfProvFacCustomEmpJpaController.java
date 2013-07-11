@@ -4,23 +4,20 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.pojos.CfProvFacCustomEmp;
+import es.timmps.fac.persistencia.CfProvFacCustomEmp;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfTipoValores;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.ProvFacCustom;
+import es.timmps.fac.persistencia.CfTipoValores;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.ProvFacCustom;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -28,11 +25,9 @@ import javax.transaction.UserTransaction;
  */
 public class CfProvFacCustomEmpJpaController implements Serializable {
 
-    public CfProvFacCustomEmpJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CfProvFacCustomEmpJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -226,9 +221,7 @@ public class CfProvFacCustomEmpJpaController implements Serializable {
     private List<CfProvFacCustomEmp> findCfProvFacCustomEmpEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CfProvFacCustomEmp.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CfProvFacCustomEmp as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -251,10 +244,7 @@ public class CfProvFacCustomEmpJpaController implements Serializable {
     public int getCfProvFacCustomEmpCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CfProvFacCustomEmp> rt = cq.from(CfProvFacCustomEmp.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CfProvFacCustomEmp as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

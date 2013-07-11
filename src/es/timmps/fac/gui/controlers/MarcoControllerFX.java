@@ -4,6 +4,7 @@
  */
 package es.timmps.fac.gui.controlers;
 
+import es.timmps.fac.persistencia.models.UsuariosJpaController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +22,9 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  * FXML Controller class
@@ -41,9 +45,9 @@ public class MarcoControllerFX implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-            System.out.println(url);
-        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("fratimmpPU");
+        UsuariosJpaController usus = new UsuariosJpaController(emf);
+        System.out.println(usus.findUsuarios("aperalta").getPassword());
     }    
     public void clic_b(ActionEvent evt){
         ObservableList<Tab> tabs = tab.getTabs();

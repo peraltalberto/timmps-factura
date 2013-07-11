@@ -4,27 +4,24 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Usuarios;
-import es.timmps.fac.persistencia.pojos.Clientes;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.CliAlbCab;
-import es.timmps.fac.persistencia.pojos.CliFacCab;
-import es.timmps.fac.persistencia.pojos.CliPedidosCab;
-import es.timmps.fac.persistencia.pojos.CliFacLin;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.Clientes;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.CliAlbCab;
+import es.timmps.fac.persistencia.CliFacCab;
+import es.timmps.fac.persistencia.CliPedidosCab;
+import es.timmps.fac.persistencia.CliFacLin;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.CliFacCustom;
+import es.timmps.fac.persistencia.CliFacCustom;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -32,11 +29,9 @@ import javax.transaction.UserTransaction;
  */
 public class CliFacCabJpaController implements Serializable {
 
-    public CliFacCabJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CliFacCabJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -367,9 +362,7 @@ public class CliFacCabJpaController implements Serializable {
     private List<CliFacCab> findCliFacCabEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CliFacCab.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CliFacCab as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -392,10 +385,7 @@ public class CliFacCabJpaController implements Serializable {
     public int getCliFacCabCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CliFacCab> rt = cq.from(CliFacCab.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CliFacCab as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

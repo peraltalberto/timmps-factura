@@ -4,28 +4,25 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.TipoPersona;
-import es.timmps.fac.persistencia.pojos.Direcciones;
+import es.timmps.fac.persistencia.TipoPersona;
+import es.timmps.fac.persistencia.Direcciones;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.Mails;
-import es.timmps.fac.persistencia.pojos.Clientes;
-import es.timmps.fac.persistencia.pojos.DatosPersonales;
-import es.timmps.fac.persistencia.pojos.Usuarios;
-import es.timmps.fac.persistencia.pojos.Telefonos;
-import es.timmps.fac.persistencia.pojos.DpCustom;
-import es.timmps.fac.persistencia.pojos.Proveedores;
+import es.timmps.fac.persistencia.Mails;
+import es.timmps.fac.persistencia.Clientes;
+import es.timmps.fac.persistencia.DatosPersonales;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.Telefonos;
+import es.timmps.fac.persistencia.DpCustom;
+import es.timmps.fac.persistencia.Proveedores;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -33,11 +30,9 @@ import javax.transaction.UserTransaction;
  */
 public class DatosPersonalesJpaController implements Serializable {
 
-    public DatosPersonalesJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public DatosPersonalesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -521,9 +516,7 @@ public class DatosPersonalesJpaController implements Serializable {
     private List<DatosPersonales> findDatosPersonalesEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(DatosPersonales.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from DatosPersonales as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -546,10 +539,7 @@ public class DatosPersonalesJpaController implements Serializable {
     public int getDatosPersonalesCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<DatosPersonales> rt = cq.from(DatosPersonales.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from DatosPersonales as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

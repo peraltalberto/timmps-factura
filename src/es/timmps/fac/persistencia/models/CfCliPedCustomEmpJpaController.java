@@ -4,22 +4,19 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.pojos.CfCliPedCustomEmp;
+import es.timmps.fac.persistencia.CfCliPedCustomEmp;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.CliPedidosCustom;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.CliPedidosCustom;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -27,11 +24,9 @@ import javax.transaction.UserTransaction;
  */
 public class CfCliPedCustomEmpJpaController implements Serializable {
 
-    public CfCliPedCustomEmpJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CfCliPedCustomEmpJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -197,9 +192,7 @@ public class CfCliPedCustomEmpJpaController implements Serializable {
     private List<CfCliPedCustomEmp> findCfCliPedCustomEmpEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CfCliPedCustomEmp.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CfCliPedCustomEmp as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -222,10 +215,7 @@ public class CfCliPedCustomEmpJpaController implements Serializable {
     public int getCfCliPedCustomEmpCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CfCliPedCustomEmp> rt = cq.from(CfCliPedCustomEmp.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CfCliPedCustomEmp as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

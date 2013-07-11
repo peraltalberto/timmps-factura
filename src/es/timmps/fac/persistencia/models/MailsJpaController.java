@@ -4,18 +4,15 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.DatosPersonales;
-import es.timmps.fac.persistencia.pojos.Mails;
+import es.timmps.fac.persistencia.DatosPersonales;
+import es.timmps.fac.persistencia.Mails;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -23,11 +20,9 @@ import javax.transaction.UserTransaction;
  */
 public class MailsJpaController implements Serializable {
 
-    public MailsJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public MailsJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -132,9 +127,7 @@ public class MailsJpaController implements Serializable {
     private List<Mails> findMailsEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Mails.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Mails as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -157,10 +150,7 @@ public class MailsJpaController implements Serializable {
     public int getMailsCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Mails> rt = cq.from(Mails.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Mails as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

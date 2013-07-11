@@ -1,63 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
   <persistence-unit name="fratimmpPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>es.timmps.fac.persistencia.pojos.CliPedidosLin</class>
-    <class>es.timmps.fac.persistencia.pojos.Grupos</class>
-    <class>es.timmps.fac.persistencia.pojos.CfProvFacCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.PreciosCompras</class>
-    <class>es.timmps.fac.persistencia.pojos.CfCliFacCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.CliPedidosCab</class>
-    <class>es.timmps.fac.persistencia.pojos.Clientes</class>
-    <class>es.timmps.fac.persistencia.pojos.ArticulosCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CliAlbLin</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvPedidosCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CfTipoValores</class>
-    <class>es.timmps.fac.persistencia.pojos.Direcciones</class>
-    <class>es.timmps.fac.persistencia.pojos.Articulos</class>
-    <class>es.timmps.fac.persistencia.pojos.Empresas</class>
-    <class>es.timmps.fac.persistencia.pojos.Usuarios</class>
-    <class>es.timmps.fac.persistencia.pojos.CfProvAlbCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.RegistroLog</class>
-    <class>es.timmps.fac.persistencia.pojos.Telefonos</class>
-    <class>es.timmps.fac.persistencia.pojos.Promociones</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvAlbCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CfProdCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvAlbCab</class>
-    <class>es.timmps.fac.persistencia.pojos.CliAlbCab</class>
-    <class>es.timmps.fac.persistencia.pojos.CfTipoImpuesto</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvAlbLin</class>
-    <class>es.timmps.fac.persistencia.pojos.CliPedidosCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CfGlobal</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvPedidosLin</class>
-    <class>es.timmps.fac.persistencia.pojos.CfProvPedCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.TipoLog</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvFacCab</class>
-    <class>es.timmps.fac.persistencia.pojos.DpCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.PreciosVentas</class>
-    <class>es.timmps.fac.persistencia.pojos.DatosPersonales</class>
-    <class>es.timmps.fac.persistencia.pojos.Contadores</class>
-    <class>es.timmps.fac.persistencia.pojos.TipoPersona</class>
-    <class>es.timmps.fac.persistencia.pojos.CliFacCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CliFacLin</class>
-    <class>es.timmps.fac.persistencia.pojos.CfDpCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.Mails</class>
-    <class>es.timmps.fac.persistencia.pojos.Proveedores</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvFacLin</class>
-    <class>es.timmps.fac.persistencia.pojos.Almacenes</class>
-    <class>es.timmps.fac.persistencia.pojos.CfCliPedCustomEmp</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvPedidosCab</class>
-    <class>es.timmps.fac.persistencia.pojos.Stock</class>
-    <class>es.timmps.fac.persistencia.pojos.ProvFacCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CliFacCab</class>
-    <class>es.timmps.fac.persistencia.pojos.CliAlbCustom</class>
-    <class>es.timmps.fac.persistencia.pojos.CfCliAlbCustomEmp</class>
+    <class>es.timmps.fac.persistencia.Almacenes</class>
+    <class>es.timmps.fac.persistencia.CliFacLin</class>
+    <class>es.timmps.fac.persistencia.CliAlbCab</class>
+    <class>es.timmps.fac.persistencia.CfTipoValores</class>
+    <class>es.timmps.fac.persistencia.ProvFacLin</class>
+    <class>es.timmps.fac.persistencia.CfGlobal</class>
+    <class>es.timmps.fac.persistencia.PreciosCompras</class>
+    <class>es.timmps.fac.persistencia.Promociones</class>
+    <class>es.timmps.fac.persistencia.CliPedidosCustom</class>
+    <class>es.timmps.fac.persistencia.Grupos</class>
+    <class>es.timmps.fac.persistencia.CliAlbLin</class>
+    <class>es.timmps.fac.persistencia.ProvPedidosLin</class>
+    <class>es.timmps.fac.persistencia.Contadores</class>
+    <class>es.timmps.fac.persistencia.Direcciones</class>
+    <class>es.timmps.fac.persistencia.ProvPedidosCab</class>
+    <class>es.timmps.fac.persistencia.DpCustom</class>
+    <class>es.timmps.fac.persistencia.ProvAlbLin</class>
+    <class>es.timmps.fac.persistencia.Clientes</class>
+    <class>es.timmps.fac.persistencia.CfProvPedCustomEmp</class>
+    <class>es.timmps.fac.persistencia.ProvPedidosCustom</class>
+    <class>es.timmps.fac.persistencia.ProvAlbCab</class>
+    <class>es.timmps.fac.persistencia.CfTipoImpuesto</class>
+    <class>es.timmps.fac.persistencia.Articulos</class>
+    <class>es.timmps.fac.persistencia.TipoLog</class>
+    <class>es.timmps.fac.persistencia.PreciosVentas</class>
+    <class>es.timmps.fac.persistencia.CliFacCustom</class>
+    <class>es.timmps.fac.persistencia.CfProvFacCustomEmp</class>
+    <class>es.timmps.fac.persistencia.CfCliFacCustomEmp</class>
+    <class>es.timmps.fac.persistencia.CliFacCab</class>
+    <class>es.timmps.fac.persistencia.ProvFacCustom</class>
+    <class>es.timmps.fac.persistencia.Stock</class>
+    <class>es.timmps.fac.persistencia.CliAlbCustom</class>
+    <class>es.timmps.fac.persistencia.CfCliAlbCustomEmp</class>
+    <class>es.timmps.fac.persistencia.DatosPersonales</class>
+    <class>es.timmps.fac.persistencia.CfProvAlbCustomEmp</class>
+    <class>es.timmps.fac.persistencia.CliPedidosLin</class>
+    <class>es.timmps.fac.persistencia.Telefonos</class>
+    <class>es.timmps.fac.persistencia.CfCliPedCustomEmp</class>
+    <class>es.timmps.fac.persistencia.TipoPersona</class>
+    <class>es.timmps.fac.persistencia.ArticulosCustom</class>
+    <class>es.timmps.fac.persistencia.Mails</class>
+    <class>es.timmps.fac.persistencia.Proveedores</class>
+    <class>es.timmps.fac.persistencia.RegistroLog</class>
+    <class>es.timmps.fac.persistencia.ProvAlbCustom</class>
+    <class>es.timmps.fac.persistencia.Empresas</class>
+    <class>es.timmps.fac.persistencia.Usuarios</class>
+    <class>es.timmps.fac.persistencia.ProvFacCab</class>
+    <class>es.timmps.fac.persistencia.CliPedidosCab</class>
+    <class>es.timmps.fac.persistencia.CfProdCustomEmp</class>
+    <class>es.timmps.fac.persistencia.CfDpCustomEmp</class>
     <properties>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
       <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/timmp_fac?zeroDateTimeBehavior=convertToNull"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>
   </persistence-unit>
- 
 </persistence>

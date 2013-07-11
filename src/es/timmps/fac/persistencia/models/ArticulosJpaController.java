@@ -4,33 +4,30 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
-import es.timmps.fac.persistencia.pojos.Articulos;
+import es.timmps.fac.persistencia.Articulos;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.ProvFacLin;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.ProvFacLin;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.Stock;
-import es.timmps.fac.persistencia.pojos.PreciosCompras;
-import es.timmps.fac.persistencia.pojos.ProvPedidosLin;
-import es.timmps.fac.persistencia.pojos.ProvAlbLin;
-import es.timmps.fac.persistencia.pojos.Promociones;
-import es.timmps.fac.persistencia.pojos.CliPedidosLin;
-import es.timmps.fac.persistencia.pojos.CliAlbLin;
-import es.timmps.fac.persistencia.pojos.ArticulosCustom;
-import es.timmps.fac.persistencia.pojos.PreciosVentas;
-import es.timmps.fac.persistencia.pojos.CliFacLin;
+import es.timmps.fac.persistencia.Stock;
+import es.timmps.fac.persistencia.PreciosCompras;
+import es.timmps.fac.persistencia.ProvPedidosLin;
+import es.timmps.fac.persistencia.ProvAlbLin;
+import es.timmps.fac.persistencia.Promociones;
+import es.timmps.fac.persistencia.CliPedidosLin;
+import es.timmps.fac.persistencia.CliAlbLin;
+import es.timmps.fac.persistencia.ArticulosCustom;
+import es.timmps.fac.persistencia.PreciosVentas;
+import es.timmps.fac.persistencia.CliFacLin;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -38,11 +35,9 @@ import javax.transaction.UserTransaction;
  */
 public class ArticulosJpaController implements Serializable {
 
-    public ArticulosJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ArticulosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -723,9 +718,7 @@ public class ArticulosJpaController implements Serializable {
     private List<Articulos> findArticulosEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Articulos.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Articulos as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -748,10 +741,7 @@ public class ArticulosJpaController implements Serializable {
     public int getArticulosCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Articulos> rt = cq.from(Articulos.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Articulos as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

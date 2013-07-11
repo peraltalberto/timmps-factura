@@ -4,31 +4,28 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.DatosPersonales;
-import es.timmps.fac.persistencia.pojos.Grupos;
+import es.timmps.fac.persistencia.DatosPersonales;
+import es.timmps.fac.persistencia.Grupos;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.ProvPedidosCab;
-import es.timmps.fac.persistencia.pojos.CliAlbCab;
-import es.timmps.fac.persistencia.pojos.RegistroLog;
-import es.timmps.fac.persistencia.pojos.ProvFacCab;
-import es.timmps.fac.persistencia.pojos.ProvAlbCab;
-import es.timmps.fac.persistencia.pojos.CliFacCab;
-import es.timmps.fac.persistencia.pojos.CliPedidosCab;
-import es.timmps.fac.persistencia.pojos.Usuarios;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.ProvPedidosCab;
+import es.timmps.fac.persistencia.CliAlbCab;
+import es.timmps.fac.persistencia.RegistroLog;
+import es.timmps.fac.persistencia.ProvFacCab;
+import es.timmps.fac.persistencia.ProvAlbCab;
+import es.timmps.fac.persistencia.CliFacCab;
+import es.timmps.fac.persistencia.CliPedidosCab;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -36,11 +33,9 @@ import javax.transaction.UserTransaction;
  */
 public class UsuariosJpaController implements Serializable {
 
-    public UsuariosJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public UsuariosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -607,9 +602,7 @@ public class UsuariosJpaController implements Serializable {
     private List<Usuarios> findUsuariosEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Usuarios.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Usuarios as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -632,10 +625,7 @@ public class UsuariosJpaController implements Serializable {
     public int getUsuariosCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Usuarios> rt = cq.from(Usuarios.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Usuarios as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

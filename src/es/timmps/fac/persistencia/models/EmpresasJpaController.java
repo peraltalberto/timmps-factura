@@ -4,46 +4,43 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Grupos;
+import es.timmps.fac.persistencia.Grupos;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.Usuarios;
-import es.timmps.fac.persistencia.pojos.CfProdCustomEmp;
-import es.timmps.fac.persistencia.pojos.ProvPedidosCab;
-import es.timmps.fac.persistencia.pojos.CliAlbCab;
-import es.timmps.fac.persistencia.pojos.Stock;
-import es.timmps.fac.persistencia.pojos.PreciosCompras;
-import es.timmps.fac.persistencia.pojos.Contadores;
-import es.timmps.fac.persistencia.pojos.CfProvPedCustomEmp;
-import es.timmps.fac.persistencia.pojos.Clientes;
-import es.timmps.fac.persistencia.pojos.CfCliAlbCustomEmp;
-import es.timmps.fac.persistencia.pojos.ProvFacCab;
-import es.timmps.fac.persistencia.pojos.CfCliFacCustomEmp;
-import es.timmps.fac.persistencia.pojos.ProvAlbCab;
-import es.timmps.fac.persistencia.pojos.Articulos;
-import es.timmps.fac.persistencia.pojos.CliFacCab;
-import es.timmps.fac.persistencia.pojos.Promociones;
-import es.timmps.fac.persistencia.pojos.CfProvAlbCustomEmp;
-import es.timmps.fac.persistencia.pojos.Almacenes;
-import es.timmps.fac.persistencia.pojos.CfDpCustomEmp;
-import es.timmps.fac.persistencia.pojos.CfCliPedCustomEmp;
-import es.timmps.fac.persistencia.pojos.CfProvFacCustomEmp;
-import es.timmps.fac.persistencia.pojos.Proveedores;
-import es.timmps.fac.persistencia.pojos.PreciosVentas;
-import es.timmps.fac.persistencia.pojos.CliPedidosCab;
-import es.timmps.fac.persistencia.pojos.Empresas;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.CfProdCustomEmp;
+import es.timmps.fac.persistencia.ProvPedidosCab;
+import es.timmps.fac.persistencia.CliAlbCab;
+import es.timmps.fac.persistencia.Stock;
+import es.timmps.fac.persistencia.PreciosCompras;
+import es.timmps.fac.persistencia.Contadores;
+import es.timmps.fac.persistencia.CfProvPedCustomEmp;
+import es.timmps.fac.persistencia.Clientes;
+import es.timmps.fac.persistencia.CfCliAlbCustomEmp;
+import es.timmps.fac.persistencia.ProvFacCab;
+import es.timmps.fac.persistencia.CfCliFacCustomEmp;
+import es.timmps.fac.persistencia.ProvAlbCab;
+import es.timmps.fac.persistencia.Articulos;
+import es.timmps.fac.persistencia.CliFacCab;
+import es.timmps.fac.persistencia.Promociones;
+import es.timmps.fac.persistencia.CfProvAlbCustomEmp;
+import es.timmps.fac.persistencia.Almacenes;
+import es.timmps.fac.persistencia.CfDpCustomEmp;
+import es.timmps.fac.persistencia.CfCliPedCustomEmp;
+import es.timmps.fac.persistencia.CfProvFacCustomEmp;
+import es.timmps.fac.persistencia.Proveedores;
+import es.timmps.fac.persistencia.PreciosVentas;
+import es.timmps.fac.persistencia.CliPedidosCab;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -51,11 +48,9 @@ import javax.transaction.UserTransaction;
  */
 public class EmpresasJpaController implements Serializable {
 
-    public EmpresasJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public EmpresasJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -1442,9 +1437,7 @@ public class EmpresasJpaController implements Serializable {
     private List<Empresas> findEmpresasEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Empresas.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Empresas as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -1467,10 +1460,7 @@ public class EmpresasJpaController implements Serializable {
     public int getEmpresasCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Empresas> rt = cq.from(Empresas.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Empresas as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

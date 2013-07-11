@@ -4,21 +4,18 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfCliAlbCustomEmp;
-import es.timmps.fac.persistencia.pojos.CliAlbCab;
-import es.timmps.fac.persistencia.pojos.CliAlbCustom;
-import es.timmps.fac.persistencia.pojos.CliAlbCustomPK;
+import es.timmps.fac.persistencia.CfCliAlbCustomEmp;
+import es.timmps.fac.persistencia.CliAlbCab;
+import es.timmps.fac.persistencia.CliAlbCustom;
+import es.timmps.fac.persistencia.CliAlbCustomPK;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -26,11 +23,9 @@ import javax.transaction.UserTransaction;
  */
 public class CliAlbCustomJpaController implements Serializable {
 
-    public CliAlbCustomJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CliAlbCustomJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -175,9 +170,7 @@ public class CliAlbCustomJpaController implements Serializable {
     private List<CliAlbCustom> findCliAlbCustomEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CliAlbCustom.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CliAlbCustom as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -200,10 +193,7 @@ public class CliAlbCustomJpaController implements Serializable {
     public int getCliAlbCustomCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CliAlbCustom> rt = cq.from(CliAlbCustom.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CliAlbCustom as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

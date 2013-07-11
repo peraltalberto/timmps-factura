@@ -4,18 +4,15 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.DatosPersonales;
-import es.timmps.fac.persistencia.pojos.Telefonos;
+import es.timmps.fac.persistencia.DatosPersonales;
+import es.timmps.fac.persistencia.Telefonos;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -23,11 +20,9 @@ import javax.transaction.UserTransaction;
  */
 public class TelefonosJpaController implements Serializable {
 
-    public TelefonosJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public TelefonosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -132,9 +127,7 @@ public class TelefonosJpaController implements Serializable {
     private List<Telefonos> findTelefonosEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Telefonos.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Telefonos as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -157,10 +150,7 @@ public class TelefonosJpaController implements Serializable {
     public int getTelefonosCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Telefonos> rt = cq.from(Telefonos.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from Telefonos as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

@@ -4,21 +4,18 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfProvAlbCustomEmp;
-import es.timmps.fac.persistencia.pojos.ProvAlbCab;
-import es.timmps.fac.persistencia.pojos.ProvAlbCustom;
-import es.timmps.fac.persistencia.pojos.ProvAlbCustomPK;
+import es.timmps.fac.persistencia.CfProvAlbCustomEmp;
+import es.timmps.fac.persistencia.ProvAlbCab;
+import es.timmps.fac.persistencia.ProvAlbCustom;
+import es.timmps.fac.persistencia.ProvAlbCustomPK;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -26,11 +23,9 @@ import javax.transaction.UserTransaction;
  */
 public class ProvAlbCustomJpaController implements Serializable {
 
-    public ProvAlbCustomJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ProvAlbCustomJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -41,8 +36,8 @@ public class ProvAlbCustomJpaController implements Serializable {
         if (provAlbCustom.getProvAlbCustomPK() == null) {
             provAlbCustom.setProvAlbCustomPK(new ProvAlbCustomPK());
         }
-        provAlbCustom.getProvAlbCustomPK().setCodCampo(provAlbCustom.getCfProvAlbCustomEmp().getId());
         provAlbCustom.getProvAlbCustomPK().setCodCab(provAlbCustom.getProvAlbCab().getId());
+        provAlbCustom.getProvAlbCustomPK().setCodCampo(provAlbCustom.getCfProvAlbCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -80,8 +75,8 @@ public class ProvAlbCustomJpaController implements Serializable {
     }
 
     public void edit(ProvAlbCustom provAlbCustom) throws NonexistentEntityException, Exception {
-        provAlbCustom.getProvAlbCustomPK().setCodCampo(provAlbCustom.getCfProvAlbCustomEmp().getId());
         provAlbCustom.getProvAlbCustomPK().setCodCab(provAlbCustom.getProvAlbCab().getId());
+        provAlbCustom.getProvAlbCustomPK().setCodCampo(provAlbCustom.getCfProvAlbCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -175,9 +170,7 @@ public class ProvAlbCustomJpaController implements Serializable {
     private List<ProvAlbCustom> findProvAlbCustomEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(ProvAlbCustom.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from ProvAlbCustom as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -200,10 +193,7 @@ public class ProvAlbCustomJpaController implements Serializable {
     public int getProvAlbCustomCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ProvAlbCustom> rt = cq.from(ProvAlbCustom.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from ProvAlbCustom as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

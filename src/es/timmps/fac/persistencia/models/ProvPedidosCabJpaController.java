@@ -4,27 +4,24 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Proveedores;
-import es.timmps.fac.persistencia.pojos.Empresas;
-import es.timmps.fac.persistencia.pojos.Usuarios;
-import es.timmps.fac.persistencia.pojos.ProvPedidosCustom;
+import es.timmps.fac.persistencia.Proveedores;
+import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.ProvPedidosCustom;
 import java.util.ArrayList;
 import java.util.Collection;
-import es.timmps.fac.persistencia.pojos.ProvPedidosLin;
-import es.timmps.fac.persistencia.pojos.ProvFacCab;
-import es.timmps.fac.persistencia.pojos.ProvAlbCab;
-import es.timmps.fac.persistencia.pojos.ProvPedidosCab;
+import es.timmps.fac.persistencia.ProvPedidosLin;
+import es.timmps.fac.persistencia.ProvFacCab;
+import es.timmps.fac.persistencia.ProvAlbCab;
+import es.timmps.fac.persistencia.ProvPedidosCab;
+import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -32,11 +29,9 @@ import javax.transaction.UserTransaction;
  */
 public class ProvPedidosCabJpaController implements Serializable {
 
-    public ProvPedidosCabJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ProvPedidosCabJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -409,9 +404,7 @@ public class ProvPedidosCabJpaController implements Serializable {
     private List<ProvPedidosCab> findProvPedidosCabEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(ProvPedidosCab.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from ProvPedidosCab as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -434,10 +427,7 @@ public class ProvPedidosCabJpaController implements Serializable {
     public int getProvPedidosCabCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ProvPedidosCab> rt = cq.from(ProvPedidosCab.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from ProvPedidosCab as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

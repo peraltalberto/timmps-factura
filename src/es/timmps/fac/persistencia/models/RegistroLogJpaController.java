@@ -4,19 +4,16 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.pojos.RegistroLog;
+import es.timmps.fac.persistencia.RegistroLog;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.Usuarios;
-import es.timmps.fac.persistencia.pojos.TipoLog;
+import es.timmps.fac.persistencia.Usuarios;
+import es.timmps.fac.persistencia.TipoLog;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -24,11 +21,9 @@ import javax.transaction.UserTransaction;
  */
 public class RegistroLogJpaController implements Serializable {
 
-    public RegistroLogJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public RegistroLogJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -161,9 +156,7 @@ public class RegistroLogJpaController implements Serializable {
     private List<RegistroLog> findRegistroLogEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(RegistroLog.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from RegistroLog as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -186,10 +179,7 @@ public class RegistroLogJpaController implements Serializable {
     public int getRegistroLogCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<RegistroLog> rt = cq.from(RegistroLog.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from RegistroLog as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

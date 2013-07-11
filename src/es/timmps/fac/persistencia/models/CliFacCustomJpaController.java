@@ -4,21 +4,18 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfCliFacCustomEmp;
-import es.timmps.fac.persistencia.pojos.CliFacCab;
-import es.timmps.fac.persistencia.pojos.CliFacCustom;
-import es.timmps.fac.persistencia.pojos.CliFacCustomPK;
+import es.timmps.fac.persistencia.CfCliFacCustomEmp;
+import es.timmps.fac.persistencia.CliFacCab;
+import es.timmps.fac.persistencia.CliFacCustom;
+import es.timmps.fac.persistencia.CliFacCustomPK;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -26,11 +23,9 @@ import javax.transaction.UserTransaction;
  */
 public class CliFacCustomJpaController implements Serializable {
 
-    public CliFacCustomJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CliFacCustomJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -41,8 +36,8 @@ public class CliFacCustomJpaController implements Serializable {
         if (cliFacCustom.getCliFacCustomPK() == null) {
             cliFacCustom.setCliFacCustomPK(new CliFacCustomPK());
         }
-        cliFacCustom.getCliFacCustomPK().setCodCab(cliFacCustom.getCliFacCab().getId());
         cliFacCustom.getCliFacCustomPK().setCodCampo(cliFacCustom.getCfCliFacCustomEmp().getId());
+        cliFacCustom.getCliFacCustomPK().setCodCab(cliFacCustom.getCliFacCab().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -80,8 +75,8 @@ public class CliFacCustomJpaController implements Serializable {
     }
 
     public void edit(CliFacCustom cliFacCustom) throws NonexistentEntityException, Exception {
-        cliFacCustom.getCliFacCustomPK().setCodCab(cliFacCustom.getCliFacCab().getId());
         cliFacCustom.getCliFacCustomPK().setCodCampo(cliFacCustom.getCfCliFacCustomEmp().getId());
+        cliFacCustom.getCliFacCustomPK().setCodCab(cliFacCustom.getCliFacCab().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -175,9 +170,7 @@ public class CliFacCustomJpaController implements Serializable {
     private List<CliFacCustom> findCliFacCustomEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(CliFacCustom.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from CliFacCustom as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -200,10 +193,7 @@ public class CliFacCustomJpaController implements Serializable {
     public int getCliFacCustomCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<CliFacCustom> rt = cq.from(CliFacCustom.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from CliFacCustom as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();

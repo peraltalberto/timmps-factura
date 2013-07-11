@@ -4,21 +4,18 @@
  */
 package es.timmps.fac.persistencia.models;
 
-import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
-import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import es.timmps.fac.persistencia.pojos.CfDpCustomEmp;
-import es.timmps.fac.persistencia.pojos.DatosPersonales;
-import es.timmps.fac.persistencia.pojos.DpCustom;
-import es.timmps.fac.persistencia.pojos.DpCustomPK;
+import es.timmps.fac.persistencia.CfDpCustomEmp;
+import es.timmps.fac.persistencia.DatosPersonales;
+import es.timmps.fac.persistencia.DpCustom;
+import es.timmps.fac.persistencia.DpCustomPK;
+import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -26,11 +23,9 @@ import javax.transaction.UserTransaction;
  */
 public class DpCustomJpaController implements Serializable {
 
-    public DpCustomJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public DpCustomJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -175,9 +170,7 @@ public class DpCustomJpaController implements Serializable {
     private List<DpCustom> findDpCustomEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(DpCustom.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from DpCustom as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -200,10 +193,7 @@ public class DpCustomJpaController implements Serializable {
     public int getDpCustomCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<DpCustom> rt = cq.from(DpCustom.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select count(o) from DpCustom as o");
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
