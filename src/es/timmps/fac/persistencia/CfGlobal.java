@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -41,7 +42,7 @@ public class CfGlobal implements Serializable {
     @Column(name = "VALOR")
     private String valor;
     @JoinColumn(name = "TIPO_DATO", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     private CfTipoValores tipoDato;
 
     public CfGlobal() {

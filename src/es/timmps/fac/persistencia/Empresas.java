@@ -33,6 +33,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresas.findByCodigo", query = "SELECT e FROM Empresas e WHERE e.codigo = :codigo"),
     @NamedQuery(name = "Empresas.findByCodigoPersona", query = "SELECT e FROM Empresas e WHERE e.codigoPersona = :codigoPersona")})
 public class Empresas implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ACTIVO")
+    private int activo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresas")
+    private Collection<EmpGrupo> empGrupoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresas")
+    private Collection<EmpUsu> empUsuCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -373,7 +380,33 @@ public class Empresas implements Serializable {
 
     @Override
     public String toString() {
-        return "es.timmps.fac.persistencia.Empresas[ codigo=" + codigo + " ]";
+        return  codigo;
+    }
+
+    public int getActivo() {
+        return activo;
+    }
+
+    public void setActivo(int activo) {
+        this.activo = activo;
+    }
+
+    @XmlTransient
+    public Collection<EmpGrupo> getEmpGrupoCollection() {
+        return empGrupoCollection;
+    }
+
+    public void setEmpGrupoCollection(Collection<EmpGrupo> empGrupoCollection) {
+        this.empGrupoCollection = empGrupoCollection;
+    }
+
+    @XmlTransient
+    public Collection<EmpUsu> getEmpUsuCollection() {
+        return empUsuCollection;
+    }
+
+    public void setEmpUsuCollection(Collection<EmpUsu> empUsuCollection) {
+        this.empUsuCollection = empUsuCollection;
     }
     
 }

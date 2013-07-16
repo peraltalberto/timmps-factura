@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?scenebuilder-stylesheet css/userlogin.css?>
+
+<AnchorPane id="AnchorPane" minWidth="319.0" prefHeight="251.9999951171875" prefWidth="403.199951171875" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="es.timmps.fac.gui.controlers.UserLoginController">
+  <children>
+    <ImageView fitHeight="251.9999998258129" fitWidth="403.20001220703125" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-6.37" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-84.2" AnchorPane.topAnchor="0.0">
+      <image>
+        <Image url="@images/LoginBg.png" preserveRatio="false" smooth="false" />
+      </image>
+    </ImageView>
+    <TextField fx:id="txUser" layoutX="37.0" layoutY="46.0" prefWidth="200.0" />
+    <PasswordField id="txLabel" fx:id="txPass" layoutX="37.0" layoutY="96.0" prefWidth="200.0" />
+    <ComboBox fx:id="cbEmpresas" layoutX="37.0" layoutY="154.0" onAction="#selEmpresa" prefHeight="21.0" prefWidth="200.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <ProgressBar fx:id="pbUser" layoutX="319.0" layoutY="230.0" prefHeight="14.0" prefWidth="61.0" progress="0.0" />
+    <Label layoutX="24.0" layoutY="27.0" text="Usuario">
+      <textFill>
+        <Color blue="0.800" green="0.320" red="0.000" fx:id="x1" />
+      </textFill>
+    </Label>
+    <Label layoutX="24.0" layoutY="77.0" text="Contraseña" textFill="$x1" />
+    <Label layoutX="24.0" layoutY="130.0" text="Empresa" textFill="$x1" />
+    <Button fx:id="btAceptar" defaultButton="true" layoutX="24.0" layoutY="219.0" mnemonicParsing="false" onMouseClicked="#aceptar" text="Aceptar" textFill="WHITE">
+      <font>
+        <Font name="Segoe UI" size="12.0" />
+      </font>
+      <stylesheets>
+        <URL value="@css/userlogin.css" />
+      </stylesheets>
+    </Button>
+    <Button fx:id="btCancel" cancelButton="true" defaultButton="true" layoutX="115.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#cancel" prefWidth="60.0" text="Cancel" />
+    <Label fx:id="txError" layoutX="40.0" layoutY="189.0" prefWidth="349.20001220703125" textFill="RED" underline="true" />
+  </children>
+  <stylesheets>
+    <URL value="@css/userlogin.css" />
+  </stylesheets>
+</AnchorPane>

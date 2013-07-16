@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -33,6 +34,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuarios.findById", query = "SELECT u FROM Usuarios u WHERE u.id = :id"),
     @NamedQuery(name = "Usuarios.findByPassword", query = "SELECT u FROM Usuarios u WHERE u.password = :password")})
 public class Usuarios implements Serializable {
+    @ManyToMany(mappedBy = "usuariosCollection")
+    private Collection<Roles> rolesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
+    private Collection<UsuGrupo> usuGrupoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
+    private Collection<EmpUsu> empUsuCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -43,7 +50,7 @@ public class Usuarios implements Serializable {
     private String password;
     @ManyToMany(mappedBy = "usuariosCollection")
     private Collection<Grupos> gruposCollection;
-    @ManyToMany(mappedBy = "usuariosCollection")
+    @ManyToMany(mappedBy = "usuariosCollection", fetch = FetchType.EAGER )
     private Collection<Empresas> empresasCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<ProvPedidosCab> provPedidosCabCollection;
@@ -203,6 +210,33 @@ public class Usuarios implements Serializable {
     @Override
     public String toString() {
         return "es.timmps.fac.persistencia.Usuarios[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Roles> getRolesCollection() {
+        return rolesCollection;
+    }
+
+    public void setRolesCollection(Collection<Roles> rolesCollection) {
+        this.rolesCollection = rolesCollection;
+    }
+
+    @XmlTransient
+    public Collection<UsuGrupo> getUsuGrupoCollection() {
+        return usuGrupoCollection;
+    }
+
+    public void setUsuGrupoCollection(Collection<UsuGrupo> usuGrupoCollection) {
+        this.usuGrupoCollection = usuGrupoCollection;
+    }
+
+    @XmlTransient
+    public Collection<EmpUsu> getEmpUsuCollection() {
+        return empUsuCollection;
+    }
+
+    public void setEmpUsuCollection(Collection<EmpUsu> empUsuCollection) {
+        this.empUsuCollection = empUsuCollection;
     }
     
 }

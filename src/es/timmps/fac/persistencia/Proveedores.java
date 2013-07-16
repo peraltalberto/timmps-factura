@@ -31,6 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Proveedores.findAll", query = "SELECT p FROM Proveedores p"),
     @NamedQuery(name = "Proveedores.findByCodigo", query = "SELECT p FROM Proveedores p WHERE p.codigo = :codigo")})
 public class Proveedores implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ACTIVO")
+    private int activo;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -141,6 +144,14 @@ public class Proveedores implements Serializable {
     @Override
     public String toString() {
         return "es.timmps.fac.persistencia.Proveedores[ codigo=" + codigo + " ]";
+    }
+
+    public int getActivo() {
+        return activo;
+    }
+
+    public void setActivo(int activo) {
+        this.activo = activo;
     }
     
 }

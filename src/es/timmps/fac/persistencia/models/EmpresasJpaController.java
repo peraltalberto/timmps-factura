@@ -34,6 +34,8 @@ import es.timmps.fac.persistencia.CfProvFacCustomEmp;
 import es.timmps.fac.persistencia.Proveedores;
 import es.timmps.fac.persistencia.PreciosVentas;
 import es.timmps.fac.persistencia.CliPedidosCab;
+import es.timmps.fac.persistencia.EmpGrupo;
+import es.timmps.fac.persistencia.EmpUsu;
 import es.timmps.fac.persistencia.Empresas;
 import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
@@ -132,6 +134,12 @@ public class EmpresasJpaController implements Serializable {
         }
         if (empresas.getCliPedidosCabCollection() == null) {
             empresas.setCliPedidosCabCollection(new ArrayList<CliPedidosCab>());
+        }
+        if (empresas.getEmpGrupoCollection() == null) {
+            empresas.setEmpGrupoCollection(new ArrayList<EmpGrupo>());
+        }
+        if (empresas.getEmpUsuCollection() == null) {
+            empresas.setEmpUsuCollection(new ArrayList<EmpUsu>());
         }
         EntityManager em = null;
         try {
@@ -287,6 +295,18 @@ public class EmpresasJpaController implements Serializable {
                 attachedCliPedidosCabCollection.add(cliPedidosCabCollectionCliPedidosCabToAttach);
             }
             empresas.setCliPedidosCabCollection(attachedCliPedidosCabCollection);
+            Collection<EmpGrupo> attachedEmpGrupoCollection = new ArrayList<EmpGrupo>();
+            for (EmpGrupo empGrupoCollectionEmpGrupoToAttach : empresas.getEmpGrupoCollection()) {
+                empGrupoCollectionEmpGrupoToAttach = em.getReference(empGrupoCollectionEmpGrupoToAttach.getClass(), empGrupoCollectionEmpGrupoToAttach.getEmpGrupoPK());
+                attachedEmpGrupoCollection.add(empGrupoCollectionEmpGrupoToAttach);
+            }
+            empresas.setEmpGrupoCollection(attachedEmpGrupoCollection);
+            Collection<EmpUsu> attachedEmpUsuCollection = new ArrayList<EmpUsu>();
+            for (EmpUsu empUsuCollectionEmpUsuToAttach : empresas.getEmpUsuCollection()) {
+                empUsuCollectionEmpUsuToAttach = em.getReference(empUsuCollectionEmpUsuToAttach.getClass(), empUsuCollectionEmpUsuToAttach.getEmpUsuPK());
+                attachedEmpUsuCollection.add(empUsuCollectionEmpUsuToAttach);
+            }
+            empresas.setEmpUsuCollection(attachedEmpUsuCollection);
             em.persist(empresas);
             for (Grupos gruposCollectionGrupos : empresas.getGruposCollection()) {
                 gruposCollectionGrupos.getEmpresasCollection().add(empresas);
@@ -503,6 +523,24 @@ public class EmpresasJpaController implements Serializable {
                     oldCodEmpOfCliPedidosCabCollectionCliPedidosCab = em.merge(oldCodEmpOfCliPedidosCabCollectionCliPedidosCab);
                 }
             }
+            for (EmpGrupo empGrupoCollectionEmpGrupo : empresas.getEmpGrupoCollection()) {
+                Empresas oldEmpresasOfEmpGrupoCollectionEmpGrupo = empGrupoCollectionEmpGrupo.getEmpresas();
+                empGrupoCollectionEmpGrupo.setEmpresas(empresas);
+                empGrupoCollectionEmpGrupo = em.merge(empGrupoCollectionEmpGrupo);
+                if (oldEmpresasOfEmpGrupoCollectionEmpGrupo != null) {
+                    oldEmpresasOfEmpGrupoCollectionEmpGrupo.getEmpGrupoCollection().remove(empGrupoCollectionEmpGrupo);
+                    oldEmpresasOfEmpGrupoCollectionEmpGrupo = em.merge(oldEmpresasOfEmpGrupoCollectionEmpGrupo);
+                }
+            }
+            for (EmpUsu empUsuCollectionEmpUsu : empresas.getEmpUsuCollection()) {
+                Empresas oldEmpresasOfEmpUsuCollectionEmpUsu = empUsuCollectionEmpUsu.getEmpresas();
+                empUsuCollectionEmpUsu.setEmpresas(empresas);
+                empUsuCollectionEmpUsu = em.merge(empUsuCollectionEmpUsu);
+                if (oldEmpresasOfEmpUsuCollectionEmpUsu != null) {
+                    oldEmpresasOfEmpUsuCollectionEmpUsu.getEmpUsuCollection().remove(empUsuCollectionEmpUsu);
+                    oldEmpresasOfEmpUsuCollectionEmpUsu = em.merge(oldEmpresasOfEmpUsuCollectionEmpUsu);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findEmpresas(empresas.getCodigo()) != null) {
@@ -572,6 +610,10 @@ public class EmpresasJpaController implements Serializable {
             Collection<PreciosVentas> preciosVentasCollectionNew = empresas.getPreciosVentasCollection();
             Collection<CliPedidosCab> cliPedidosCabCollectionOld = persistentEmpresas.getCliPedidosCabCollection();
             Collection<CliPedidosCab> cliPedidosCabCollectionNew = empresas.getCliPedidosCabCollection();
+            Collection<EmpGrupo> empGrupoCollectionOld = persistentEmpresas.getEmpGrupoCollection();
+            Collection<EmpGrupo> empGrupoCollectionNew = empresas.getEmpGrupoCollection();
+            Collection<EmpUsu> empUsuCollectionOld = persistentEmpresas.getEmpUsuCollection();
+            Collection<EmpUsu> empUsuCollectionNew = empresas.getEmpUsuCollection();
             List<String> illegalOrphanMessages = null;
             for (CfProdCustomEmp cfProdCustomEmpCollectionOldCfProdCustomEmp : cfProdCustomEmpCollectionOld) {
                 if (!cfProdCustomEmpCollectionNew.contains(cfProdCustomEmpCollectionOldCfProdCustomEmp)) {
@@ -757,6 +799,22 @@ public class EmpresasJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain CliPedidosCab " + cliPedidosCabCollectionOldCliPedidosCab + " since its codEmp field is not nullable.");
                 }
             }
+            for (EmpGrupo empGrupoCollectionOldEmpGrupo : empGrupoCollectionOld) {
+                if (!empGrupoCollectionNew.contains(empGrupoCollectionOldEmpGrupo)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EmpGrupo " + empGrupoCollectionOldEmpGrupo + " since its empresas field is not nullable.");
+                }
+            }
+            for (EmpUsu empUsuCollectionOldEmpUsu : empUsuCollectionOld) {
+                if (!empUsuCollectionNew.contains(empUsuCollectionOldEmpUsu)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EmpUsu " + empUsuCollectionOldEmpUsu + " since its empresas field is not nullable.");
+                }
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -935,6 +993,20 @@ public class EmpresasJpaController implements Serializable {
             }
             cliPedidosCabCollectionNew = attachedCliPedidosCabCollectionNew;
             empresas.setCliPedidosCabCollection(cliPedidosCabCollectionNew);
+            Collection<EmpGrupo> attachedEmpGrupoCollectionNew = new ArrayList<EmpGrupo>();
+            for (EmpGrupo empGrupoCollectionNewEmpGrupoToAttach : empGrupoCollectionNew) {
+                empGrupoCollectionNewEmpGrupoToAttach = em.getReference(empGrupoCollectionNewEmpGrupoToAttach.getClass(), empGrupoCollectionNewEmpGrupoToAttach.getEmpGrupoPK());
+                attachedEmpGrupoCollectionNew.add(empGrupoCollectionNewEmpGrupoToAttach);
+            }
+            empGrupoCollectionNew = attachedEmpGrupoCollectionNew;
+            empresas.setEmpGrupoCollection(empGrupoCollectionNew);
+            Collection<EmpUsu> attachedEmpUsuCollectionNew = new ArrayList<EmpUsu>();
+            for (EmpUsu empUsuCollectionNewEmpUsuToAttach : empUsuCollectionNew) {
+                empUsuCollectionNewEmpUsuToAttach = em.getReference(empUsuCollectionNewEmpUsuToAttach.getClass(), empUsuCollectionNewEmpUsuToAttach.getEmpUsuPK());
+                attachedEmpUsuCollectionNew.add(empUsuCollectionNewEmpUsuToAttach);
+            }
+            empUsuCollectionNew = attachedEmpUsuCollectionNew;
+            empresas.setEmpUsuCollection(empUsuCollectionNew);
             empresas = em.merge(empresas);
             for (Grupos gruposCollectionOldGrupos : gruposCollectionOld) {
                 if (!gruposCollectionNew.contains(gruposCollectionOldGrupos)) {
@@ -1213,6 +1285,28 @@ public class EmpresasJpaController implements Serializable {
                     }
                 }
             }
+            for (EmpGrupo empGrupoCollectionNewEmpGrupo : empGrupoCollectionNew) {
+                if (!empGrupoCollectionOld.contains(empGrupoCollectionNewEmpGrupo)) {
+                    Empresas oldEmpresasOfEmpGrupoCollectionNewEmpGrupo = empGrupoCollectionNewEmpGrupo.getEmpresas();
+                    empGrupoCollectionNewEmpGrupo.setEmpresas(empresas);
+                    empGrupoCollectionNewEmpGrupo = em.merge(empGrupoCollectionNewEmpGrupo);
+                    if (oldEmpresasOfEmpGrupoCollectionNewEmpGrupo != null && !oldEmpresasOfEmpGrupoCollectionNewEmpGrupo.equals(empresas)) {
+                        oldEmpresasOfEmpGrupoCollectionNewEmpGrupo.getEmpGrupoCollection().remove(empGrupoCollectionNewEmpGrupo);
+                        oldEmpresasOfEmpGrupoCollectionNewEmpGrupo = em.merge(oldEmpresasOfEmpGrupoCollectionNewEmpGrupo);
+                    }
+                }
+            }
+            for (EmpUsu empUsuCollectionNewEmpUsu : empUsuCollectionNew) {
+                if (!empUsuCollectionOld.contains(empUsuCollectionNewEmpUsu)) {
+                    Empresas oldEmpresasOfEmpUsuCollectionNewEmpUsu = empUsuCollectionNewEmpUsu.getEmpresas();
+                    empUsuCollectionNewEmpUsu.setEmpresas(empresas);
+                    empUsuCollectionNewEmpUsu = em.merge(empUsuCollectionNewEmpUsu);
+                    if (oldEmpresasOfEmpUsuCollectionNewEmpUsu != null && !oldEmpresasOfEmpUsuCollectionNewEmpUsu.equals(empresas)) {
+                        oldEmpresasOfEmpUsuCollectionNewEmpUsu.getEmpUsuCollection().remove(empUsuCollectionNewEmpUsu);
+                        oldEmpresasOfEmpUsuCollectionNewEmpUsu = em.merge(oldEmpresasOfEmpUsuCollectionNewEmpUsu);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -1403,6 +1497,20 @@ public class EmpresasJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Empresas (" + empresas + ") cannot be destroyed since the CliPedidosCab " + cliPedidosCabCollectionOrphanCheckCliPedidosCab + " in its cliPedidosCabCollection field has a non-nullable codEmp field.");
+            }
+            Collection<EmpGrupo> empGrupoCollectionOrphanCheck = empresas.getEmpGrupoCollection();
+            for (EmpGrupo empGrupoCollectionOrphanCheckEmpGrupo : empGrupoCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Empresas (" + empresas + ") cannot be destroyed since the EmpGrupo " + empGrupoCollectionOrphanCheckEmpGrupo + " in its empGrupoCollection field has a non-nullable empresas field.");
+            }
+            Collection<EmpUsu> empUsuCollectionOrphanCheck = empresas.getEmpUsuCollection();
+            for (EmpUsu empUsuCollectionOrphanCheckEmpUsu : empUsuCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Empresas (" + empresas + ") cannot be destroyed since the EmpUsu " + empUsuCollectionOrphanCheckEmpUsu + " in its empUsuCollection field has a non-nullable empresas field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

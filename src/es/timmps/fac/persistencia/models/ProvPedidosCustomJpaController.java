@@ -36,8 +36,8 @@ public class ProvPedidosCustomJpaController implements Serializable {
         if (provPedidosCustom.getProvPedidosCustomPK() == null) {
             provPedidosCustom.setProvPedidosCustomPK(new ProvPedidosCustomPK());
         }
-        provPedidosCustom.getProvPedidosCustomPK().setCodCampo(provPedidosCustom.getCfProvPedCustomEmp().getId());
         provPedidosCustom.getProvPedidosCustomPK().setCodCab(provPedidosCustom.getProvPedidosCab().getId());
+        provPedidosCustom.getProvPedidosCustomPK().setCodCampo(provPedidosCustom.getCfProvPedCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -75,8 +75,8 @@ public class ProvPedidosCustomJpaController implements Serializable {
     }
 
     public void edit(ProvPedidosCustom provPedidosCustom) throws NonexistentEntityException, Exception {
-        provPedidosCustom.getProvPedidosCustomPK().setCodCampo(provPedidosCustom.getCfProvPedCustomEmp().getId());
         provPedidosCustom.getProvPedidosCustomPK().setCodCab(provPedidosCustom.getProvPedidosCab().getId());
+        provPedidosCustom.getProvPedidosCustomPK().setCodCampo(provPedidosCustom.getCfProvPedCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();

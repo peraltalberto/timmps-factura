@@ -35,6 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Articulos.findByPrecioDef", query = "SELECT a FROM Articulos a WHERE a.precioDef = :precioDef"),
     @NamedQuery(name = "Articulos.findByImagen", query = "SELECT a FROM Articulos a WHERE a.imagen = :imagen")})
 public class Articulos implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ACTIVO")
+    private int activo;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -263,6 +266,14 @@ public class Articulos implements Serializable {
     @Override
     public String toString() {
         return "es.timmps.fac.persistencia.Articulos[ codigo=" + codigo + " ]";
+    }
+
+    public int getActivo() {
+        return activo;
+    }
+
+    public void setActivo(int activo) {
+        this.activo = activo;
     }
     
 }

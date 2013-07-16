@@ -36,8 +36,8 @@ public class DpCustomJpaController implements Serializable {
         if (dpCustom.getDpCustomPK() == null) {
             dpCustom.setDpCustomPK(new DpCustomPK());
         }
-        dpCustom.getDpCustomPK().setCampo(dpCustom.getCfDpCustomEmp().getId());
         dpCustom.getDpCustomPK().setCodigoPersona(dpCustom.getDatosPersonales().getCodigo());
+        dpCustom.getDpCustomPK().setCampo(dpCustom.getCfDpCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -75,8 +75,8 @@ public class DpCustomJpaController implements Serializable {
     }
 
     public void edit(DpCustom dpCustom) throws NonexistentEntityException, Exception {
-        dpCustom.getDpCustomPK().setCampo(dpCustom.getCfDpCustomEmp().getId());
         dpCustom.getDpCustomPK().setCodigoPersona(dpCustom.getDatosPersonales().getCodigo());
+        dpCustom.getDpCustomPK().setCampo(dpCustom.getCfDpCustomEmp().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();

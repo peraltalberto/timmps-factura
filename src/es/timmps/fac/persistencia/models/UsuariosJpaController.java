@@ -19,6 +19,9 @@ import es.timmps.fac.persistencia.ProvFacCab;
 import es.timmps.fac.persistencia.ProvAlbCab;
 import es.timmps.fac.persistencia.CliFacCab;
 import es.timmps.fac.persistencia.CliPedidosCab;
+import es.timmps.fac.persistencia.Roles;
+import es.timmps.fac.persistencia.UsuGrupo;
+import es.timmps.fac.persistencia.EmpUsu;
 import es.timmps.fac.persistencia.Usuarios;
 import es.timmps.fac.persistencia.models.exceptions.IllegalOrphanException;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
@@ -69,6 +72,15 @@ public class UsuariosJpaController implements Serializable {
         }
         if (usuarios.getCliPedidosCabCollection() == null) {
             usuarios.setCliPedidosCabCollection(new ArrayList<CliPedidosCab>());
+        }
+        if (usuarios.getRolesCollection() == null) {
+            usuarios.setRolesCollection(new ArrayList<Roles>());
+        }
+        if (usuarios.getUsuGrupoCollection() == null) {
+            usuarios.setUsuGrupoCollection(new ArrayList<UsuGrupo>());
+        }
+        if (usuarios.getEmpUsuCollection() == null) {
+            usuarios.setEmpUsuCollection(new ArrayList<EmpUsu>());
         }
         EntityManager em = null;
         try {
@@ -133,6 +145,24 @@ public class UsuariosJpaController implements Serializable {
                 attachedCliPedidosCabCollection.add(cliPedidosCabCollectionCliPedidosCabToAttach);
             }
             usuarios.setCliPedidosCabCollection(attachedCliPedidosCabCollection);
+            Collection<Roles> attachedRolesCollection = new ArrayList<Roles>();
+            for (Roles rolesCollectionRolesToAttach : usuarios.getRolesCollection()) {
+                rolesCollectionRolesToAttach = em.getReference(rolesCollectionRolesToAttach.getClass(), rolesCollectionRolesToAttach.getId());
+                attachedRolesCollection.add(rolesCollectionRolesToAttach);
+            }
+            usuarios.setRolesCollection(attachedRolesCollection);
+            Collection<UsuGrupo> attachedUsuGrupoCollection = new ArrayList<UsuGrupo>();
+            for (UsuGrupo usuGrupoCollectionUsuGrupoToAttach : usuarios.getUsuGrupoCollection()) {
+                usuGrupoCollectionUsuGrupoToAttach = em.getReference(usuGrupoCollectionUsuGrupoToAttach.getClass(), usuGrupoCollectionUsuGrupoToAttach.getUsuGrupoPK());
+                attachedUsuGrupoCollection.add(usuGrupoCollectionUsuGrupoToAttach);
+            }
+            usuarios.setUsuGrupoCollection(attachedUsuGrupoCollection);
+            Collection<EmpUsu> attachedEmpUsuCollection = new ArrayList<EmpUsu>();
+            for (EmpUsu empUsuCollectionEmpUsuToAttach : usuarios.getEmpUsuCollection()) {
+                empUsuCollectionEmpUsuToAttach = em.getReference(empUsuCollectionEmpUsuToAttach.getClass(), empUsuCollectionEmpUsuToAttach.getEmpUsuPK());
+                attachedEmpUsuCollection.add(empUsuCollectionEmpUsuToAttach);
+            }
+            usuarios.setEmpUsuCollection(attachedEmpUsuCollection);
             em.persist(usuarios);
             if (codigoPersona != null) {
                 codigoPersona.getUsuariosCollection().add(usuarios);
@@ -209,6 +239,28 @@ public class UsuariosJpaController implements Serializable {
                     oldUsuarioOfCliPedidosCabCollectionCliPedidosCab = em.merge(oldUsuarioOfCliPedidosCabCollectionCliPedidosCab);
                 }
             }
+            for (Roles rolesCollectionRoles : usuarios.getRolesCollection()) {
+                rolesCollectionRoles.getUsuariosCollection().add(usuarios);
+                rolesCollectionRoles = em.merge(rolesCollectionRoles);
+            }
+            for (UsuGrupo usuGrupoCollectionUsuGrupo : usuarios.getUsuGrupoCollection()) {
+                Usuarios oldUsuariosOfUsuGrupoCollectionUsuGrupo = usuGrupoCollectionUsuGrupo.getUsuarios();
+                usuGrupoCollectionUsuGrupo.setUsuarios(usuarios);
+                usuGrupoCollectionUsuGrupo = em.merge(usuGrupoCollectionUsuGrupo);
+                if (oldUsuariosOfUsuGrupoCollectionUsuGrupo != null) {
+                    oldUsuariosOfUsuGrupoCollectionUsuGrupo.getUsuGrupoCollection().remove(usuGrupoCollectionUsuGrupo);
+                    oldUsuariosOfUsuGrupoCollectionUsuGrupo = em.merge(oldUsuariosOfUsuGrupoCollectionUsuGrupo);
+                }
+            }
+            for (EmpUsu empUsuCollectionEmpUsu : usuarios.getEmpUsuCollection()) {
+                Usuarios oldUsuariosOfEmpUsuCollectionEmpUsu = empUsuCollectionEmpUsu.getUsuarios();
+                empUsuCollectionEmpUsu.setUsuarios(usuarios);
+                empUsuCollectionEmpUsu = em.merge(empUsuCollectionEmpUsu);
+                if (oldUsuariosOfEmpUsuCollectionEmpUsu != null) {
+                    oldUsuariosOfEmpUsuCollectionEmpUsu.getEmpUsuCollection().remove(empUsuCollectionEmpUsu);
+                    oldUsuariosOfEmpUsuCollectionEmpUsu = em.merge(oldUsuariosOfEmpUsuCollectionEmpUsu);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findUsuarios(usuarios.getId()) != null) {
@@ -248,6 +300,12 @@ public class UsuariosJpaController implements Serializable {
             Collection<CliFacCab> cliFacCabCollectionNew = usuarios.getCliFacCabCollection();
             Collection<CliPedidosCab> cliPedidosCabCollectionOld = persistentUsuarios.getCliPedidosCabCollection();
             Collection<CliPedidosCab> cliPedidosCabCollectionNew = usuarios.getCliPedidosCabCollection();
+            Collection<Roles> rolesCollectionOld = persistentUsuarios.getRolesCollection();
+            Collection<Roles> rolesCollectionNew = usuarios.getRolesCollection();
+            Collection<UsuGrupo> usuGrupoCollectionOld = persistentUsuarios.getUsuGrupoCollection();
+            Collection<UsuGrupo> usuGrupoCollectionNew = usuarios.getUsuGrupoCollection();
+            Collection<EmpUsu> empUsuCollectionOld = persistentUsuarios.getEmpUsuCollection();
+            Collection<EmpUsu> empUsuCollectionNew = usuarios.getEmpUsuCollection();
             List<String> illegalOrphanMessages = null;
             for (ProvPedidosCab provPedidosCabCollectionOldProvPedidosCab : provPedidosCabCollectionOld) {
                 if (!provPedidosCabCollectionNew.contains(provPedidosCabCollectionOldProvPedidosCab)) {
@@ -303,6 +361,22 @@ public class UsuariosJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain CliPedidosCab " + cliPedidosCabCollectionOldCliPedidosCab + " since its usuario field is not nullable.");
+                }
+            }
+            for (UsuGrupo usuGrupoCollectionOldUsuGrupo : usuGrupoCollectionOld) {
+                if (!usuGrupoCollectionNew.contains(usuGrupoCollectionOldUsuGrupo)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain UsuGrupo " + usuGrupoCollectionOldUsuGrupo + " since its usuarios field is not nullable.");
+                }
+            }
+            for (EmpUsu empUsuCollectionOldEmpUsu : empUsuCollectionOld) {
+                if (!empUsuCollectionNew.contains(empUsuCollectionOldEmpUsu)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EmpUsu " + empUsuCollectionOldEmpUsu + " since its usuarios field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -375,6 +449,27 @@ public class UsuariosJpaController implements Serializable {
             }
             cliPedidosCabCollectionNew = attachedCliPedidosCabCollectionNew;
             usuarios.setCliPedidosCabCollection(cliPedidosCabCollectionNew);
+            Collection<Roles> attachedRolesCollectionNew = new ArrayList<Roles>();
+            for (Roles rolesCollectionNewRolesToAttach : rolesCollectionNew) {
+                rolesCollectionNewRolesToAttach = em.getReference(rolesCollectionNewRolesToAttach.getClass(), rolesCollectionNewRolesToAttach.getId());
+                attachedRolesCollectionNew.add(rolesCollectionNewRolesToAttach);
+            }
+            rolesCollectionNew = attachedRolesCollectionNew;
+            usuarios.setRolesCollection(rolesCollectionNew);
+            Collection<UsuGrupo> attachedUsuGrupoCollectionNew = new ArrayList<UsuGrupo>();
+            for (UsuGrupo usuGrupoCollectionNewUsuGrupoToAttach : usuGrupoCollectionNew) {
+                usuGrupoCollectionNewUsuGrupoToAttach = em.getReference(usuGrupoCollectionNewUsuGrupoToAttach.getClass(), usuGrupoCollectionNewUsuGrupoToAttach.getUsuGrupoPK());
+                attachedUsuGrupoCollectionNew.add(usuGrupoCollectionNewUsuGrupoToAttach);
+            }
+            usuGrupoCollectionNew = attachedUsuGrupoCollectionNew;
+            usuarios.setUsuGrupoCollection(usuGrupoCollectionNew);
+            Collection<EmpUsu> attachedEmpUsuCollectionNew = new ArrayList<EmpUsu>();
+            for (EmpUsu empUsuCollectionNewEmpUsuToAttach : empUsuCollectionNew) {
+                empUsuCollectionNewEmpUsuToAttach = em.getReference(empUsuCollectionNewEmpUsuToAttach.getClass(), empUsuCollectionNewEmpUsuToAttach.getEmpUsuPK());
+                attachedEmpUsuCollectionNew.add(empUsuCollectionNewEmpUsuToAttach);
+            }
+            empUsuCollectionNew = attachedEmpUsuCollectionNew;
+            usuarios.setEmpUsuCollection(empUsuCollectionNew);
             usuarios = em.merge(usuarios);
             if (codigoPersonaOld != null && !codigoPersonaOld.equals(codigoPersonaNew)) {
                 codigoPersonaOld.getUsuariosCollection().remove(usuarios);
@@ -485,6 +580,40 @@ public class UsuariosJpaController implements Serializable {
                     }
                 }
             }
+            for (Roles rolesCollectionOldRoles : rolesCollectionOld) {
+                if (!rolesCollectionNew.contains(rolesCollectionOldRoles)) {
+                    rolesCollectionOldRoles.getUsuariosCollection().remove(usuarios);
+                    rolesCollectionOldRoles = em.merge(rolesCollectionOldRoles);
+                }
+            }
+            for (Roles rolesCollectionNewRoles : rolesCollectionNew) {
+                if (!rolesCollectionOld.contains(rolesCollectionNewRoles)) {
+                    rolesCollectionNewRoles.getUsuariosCollection().add(usuarios);
+                    rolesCollectionNewRoles = em.merge(rolesCollectionNewRoles);
+                }
+            }
+            for (UsuGrupo usuGrupoCollectionNewUsuGrupo : usuGrupoCollectionNew) {
+                if (!usuGrupoCollectionOld.contains(usuGrupoCollectionNewUsuGrupo)) {
+                    Usuarios oldUsuariosOfUsuGrupoCollectionNewUsuGrupo = usuGrupoCollectionNewUsuGrupo.getUsuarios();
+                    usuGrupoCollectionNewUsuGrupo.setUsuarios(usuarios);
+                    usuGrupoCollectionNewUsuGrupo = em.merge(usuGrupoCollectionNewUsuGrupo);
+                    if (oldUsuariosOfUsuGrupoCollectionNewUsuGrupo != null && !oldUsuariosOfUsuGrupoCollectionNewUsuGrupo.equals(usuarios)) {
+                        oldUsuariosOfUsuGrupoCollectionNewUsuGrupo.getUsuGrupoCollection().remove(usuGrupoCollectionNewUsuGrupo);
+                        oldUsuariosOfUsuGrupoCollectionNewUsuGrupo = em.merge(oldUsuariosOfUsuGrupoCollectionNewUsuGrupo);
+                    }
+                }
+            }
+            for (EmpUsu empUsuCollectionNewEmpUsu : empUsuCollectionNew) {
+                if (!empUsuCollectionOld.contains(empUsuCollectionNewEmpUsu)) {
+                    Usuarios oldUsuariosOfEmpUsuCollectionNewEmpUsu = empUsuCollectionNewEmpUsu.getUsuarios();
+                    empUsuCollectionNewEmpUsu.setUsuarios(usuarios);
+                    empUsuCollectionNewEmpUsu = em.merge(empUsuCollectionNewEmpUsu);
+                    if (oldUsuariosOfEmpUsuCollectionNewEmpUsu != null && !oldUsuariosOfEmpUsuCollectionNewEmpUsu.equals(usuarios)) {
+                        oldUsuariosOfEmpUsuCollectionNewEmpUsu.getEmpUsuCollection().remove(empUsuCollectionNewEmpUsu);
+                        oldUsuariosOfEmpUsuCollectionNewEmpUsu = em.merge(oldUsuariosOfEmpUsuCollectionNewEmpUsu);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -564,6 +693,20 @@ public class UsuariosJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Usuarios (" + usuarios + ") cannot be destroyed since the CliPedidosCab " + cliPedidosCabCollectionOrphanCheckCliPedidosCab + " in its cliPedidosCabCollection field has a non-nullable usuario field.");
             }
+            Collection<UsuGrupo> usuGrupoCollectionOrphanCheck = usuarios.getUsuGrupoCollection();
+            for (UsuGrupo usuGrupoCollectionOrphanCheckUsuGrupo : usuGrupoCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuarios (" + usuarios + ") cannot be destroyed since the UsuGrupo " + usuGrupoCollectionOrphanCheckUsuGrupo + " in its usuGrupoCollection field has a non-nullable usuarios field.");
+            }
+            Collection<EmpUsu> empUsuCollectionOrphanCheck = usuarios.getEmpUsuCollection();
+            for (EmpUsu empUsuCollectionOrphanCheckEmpUsu : empUsuCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuarios (" + usuarios + ") cannot be destroyed since the EmpUsu " + empUsuCollectionOrphanCheckEmpUsu + " in its empUsuCollection field has a non-nullable usuarios field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -581,6 +724,11 @@ public class UsuariosJpaController implements Serializable {
             for (Empresas empresasCollectionEmpresas : empresasCollection) {
                 empresasCollectionEmpresas.getUsuariosCollection().remove(usuarios);
                 empresasCollectionEmpresas = em.merge(empresasCollectionEmpresas);
+            }
+            Collection<Roles> rolesCollection = usuarios.getRolesCollection();
+            for (Roles rolesCollectionRoles : rolesCollection) {
+                rolesCollectionRoles.getUsuariosCollection().remove(usuarios);
+                rolesCollectionRoles = em.merge(rolesCollectionRoles);
             }
             em.remove(usuarios);
             em.getTransaction().commit();

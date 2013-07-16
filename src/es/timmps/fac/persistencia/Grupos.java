@@ -7,6 +7,7 @@ package es.timmps.fac.persistencia;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -34,6 +36,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Grupos.findByNombre", query = "SELECT g FROM Grupos g WHERE g.nombre = :nombre"),
     @NamedQuery(name = "Grupos.findByDescripcion", query = "SELECT g FROM Grupos g WHERE g.descripcion = :descripcion")})
 public class Grupos implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ACTIVO")
+    private int activo;
+    @ManyToMany(mappedBy = "gruposCollection")
+    private Collection<Roles> rolesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupos")
+    private Collection<UsuGrupo> usuGrupoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupos")
+    private Collection<EmpGrupo> empGrupoCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,6 +143,41 @@ public class Grupos implements Serializable {
     @Override
     public String toString() {
         return "es.timmps.fac.persistencia.Grupos[ id=" + id + " ]";
+    }
+
+    public int getActivo() {
+        return activo;
+    }
+
+    public void setActivo(int activo) {
+        this.activo = activo;
+    }
+
+    @XmlTransient
+    public Collection<Roles> getRolesCollection() {
+        return rolesCollection;
+    }
+
+    public void setRolesCollection(Collection<Roles> rolesCollection) {
+        this.rolesCollection = rolesCollection;
+    }
+
+    @XmlTransient
+    public Collection<UsuGrupo> getUsuGrupoCollection() {
+        return usuGrupoCollection;
+    }
+
+    public void setUsuGrupoCollection(Collection<UsuGrupo> usuGrupoCollection) {
+        this.usuGrupoCollection = usuGrupoCollection;
+    }
+
+    @XmlTransient
+    public Collection<EmpGrupo> getEmpGrupoCollection() {
+        return empGrupoCollection;
+    }
+
+    public void setEmpGrupoCollection(Collection<EmpGrupo> empGrupoCollection) {
+        this.empGrupoCollection = empGrupoCollection;
     }
     
 }
