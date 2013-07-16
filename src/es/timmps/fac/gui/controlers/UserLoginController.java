@@ -10,20 +10,37 @@ import es.timmps.fac.persistencia.Empresas;
 import es.timmps.fac.persistencia.Usuarios;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
+import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import sun.plugin2.ipc.windows.WindowsEvent;
 
 /**
  * FXML Controller class
@@ -44,7 +61,8 @@ public class UserLoginController implements Initializable {
     ProgressBar pbUser;
     @FXML
     Label txError;
-    
+     @FXML
+    private AnchorPane rootP;
     
     
     CfGlobal empDef;
@@ -100,6 +118,36 @@ public class UserLoginController implements Initializable {
                     Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 pbUser.setProgress(1);
+               
+                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/es/timmps/fac/gui/Marco.fxml"));
+             Parent  root = (Parent) fxmlLoader.load();
+            Scene scene = new Scene(root);
+             Stage st = new Stage();
+             st.setScene(scene);
+             
+    st.getIcons().addAll(MainContext.getPrimaryStage().getIcons());
+   st.widthProperty().addListener(new ChangeListener<Number>() {
+    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+        System.out.println("Width: " + newSceneWidth);
+    }
+
+                });
+st.heightProperty().addListener(new ChangeListener<Number>() {
+    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+        System.out.println("Height: " + newSceneHeight);
+    }
+});
+    
+             st.show();
+              Screen screen = Screen.getPrimary();
+    Rectangle2D bounds = screen.getVisualBounds();
+    st.setX(bounds.getMinX());
+    st.setY(bounds.getMinY());
+    st.setWidth(bounds.getWidth());
+    st.setHeight(bounds.getHeight());
+
+             MainContext.getPrimaryStage().close();
+             MainContext.setPrimaryStage(st);
                 
             }
         }else{
@@ -107,6 +155,8 @@ public class UserLoginController implements Initializable {
         }
         }catch(NullPointerException e){
             txError.setText("Nombre de usuario y contraseña Errorneo");
+        } catch (IOException ex) {
+            Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
         

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.*?>
 <?scenebuilder-stylesheet css/userlogin.css?>
 
-<AnchorPane id="AnchorPane" minWidth="319.0" prefHeight="251.9999951171875" prefWidth="403.199951171875" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="es.timmps.fac.gui.controlers.UserLoginController">
+<AnchorPane id="AnchorPane" fx:id="rootP" minWidth="319.0" prefHeight="251.9999951171875" prefWidth="403.199951171875" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="es.timmps.fac.gui.controlers.UserLoginController">
   <children>
     <ImageView fitHeight="251.9999998258129" fitWidth="403.20001220703125" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-6.37" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-84.2" AnchorPane.topAnchor="0.0">
       <image>
@@ -20,7 +20,7 @@
       </image>
     </ImageView>
     <TextField fx:id="txUser" layoutX="37.0" layoutY="46.0" prefWidth="200.0" />
-    <PasswordField id="txLabel" fx:id="txPass" layoutX="37.0" layoutY="96.0" prefWidth="200.0" />
+    <PasswordField id="txLabel" fx:id="txPass" layoutX="37.0" layoutY="96.0" onAction="#aceptar" prefWidth="200.0" />
     <ComboBox fx:id="cbEmpresas" layoutX="37.0" layoutY="154.0" onAction="#selEmpresa" prefHeight="21.0" prefWidth="200.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
@@ -38,7 +38,7 @@
     </Label>
     <Label layoutX="24.0" layoutY="77.0" text="Contraseña" textFill="$x1" />
     <Label layoutX="24.0" layoutY="130.0" text="Empresa" textFill="$x1" />
-    <Button fx:id="btAceptar" defaultButton="true" layoutX="24.0" layoutY="219.0" mnemonicParsing="false" onMouseClicked="#aceptar" text="Aceptar" textFill="WHITE">
+    <Button fx:id="btAceptar" cancelButton="true" defaultButton="true" layoutX="24.0" layoutY="219.0" mnemonicParsing="false" onAction="#aceptar" text="Aceptar" textFill="WHITE">
       <font>
         <Font name="Segoe UI" size="12.0" />
       </font>
@@ -46,7 +46,7 @@
         <URL value="@css/userlogin.css" />
       </stylesheets>
     </Button>
-    <Button fx:id="btCancel" cancelButton="true" defaultButton="true" layoutX="115.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#cancel" prefWidth="60.0" text="Cancel" />
+    <Button fx:id="btCancel" defaultButton="true" layoutX="115.0" layoutY="220.0" mnemonicParsing="false" onAction="#cancel" prefWidth="60.0" text="Cancel" />
     <Label fx:id="txError" layoutX="40.0" layoutY="189.0" prefWidth="349.20001220703125" textFill="RED" underline="true" />
   </children>
   <stylesheets>

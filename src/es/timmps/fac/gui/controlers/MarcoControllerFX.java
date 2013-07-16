@@ -46,6 +46,7 @@ public class MarcoControllerFX implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        sppanel.setDividerPositions(0.1);
         System.out.println(MainContext.getUsuarios().findUsuarios("aperalta").getPassword());
     }    
     public void clic_b(ActionEvent evt){

@@ -8,6 +8,7 @@ import es.timmps.fac.persistencia.models.CfGlobalJpaController;
 import es.timmps.fac.persistencia.models.CfTipoValoresJpaController;
 import es.timmps.fac.persistencia.models.EmpresasJpaController;
 import es.timmps.fac.persistencia.models.UsuariosJpaController;
+import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -22,7 +23,7 @@ public class MainContext {
     private static EmpresasJpaController empresas = null;
     private static CfGlobalJpaController globales = null;
     private static CfTipoValoresJpaController t_datos = null;
-    
+    private static Stage primaryStage = null;
     public static EntityManagerFactory getEmf() {
         if(emf == null)
             emf = Persistence.createEntityManagerFactory("fratimmpPU");
@@ -74,6 +75,14 @@ public class MainContext {
 
     public static void setT_datos(CfTipoValoresJpaController t_datos) {
         MainContext.t_datos = t_datos;
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        MainContext.primaryStage = primaryStage;
     }
   
   

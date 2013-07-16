@@ -5,6 +5,7 @@
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane id="AnchorPane" minHeight="515.0" prefHeight="564.0" prefWidth="740.0000999999975" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="es.timmps.fac.gui.controlers.MarcoControllerFX">
@@ -30,10 +31,18 @@
     </MenuBar>
     <ToolBar id="herramientas" layoutY="20.0" minHeight="22.0" prefHeight="31.0" prefWidth="600.0000999999975" AnchorPane.leftAnchor="0.5" AnchorPane.rightAnchor="-0.5">
       <items>
-        <Button mnemonicParsing="false" onAction="#clic_b" text="Button" />
+        <Button mnemonicParsing="false" onAction="#clic_b">
+          <graphic>
+            <ImageView fitHeight="21.0" fitWidth="28.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@images/1321013977_Profile.png" preserveRatio="false" smooth="false" />
+              </image>
+            </ImageView>
+          </graphic>
+        </Button>
       </items>
     </ToolBar>
-    <SplitPane fx:id="sppanel" dividerPositions="0.10027098912317255" focusTraversable="true" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
+    <SplitPane fx:id="sppanel" dividerPositions="0.009485093565705512" focusTraversable="true" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="200.0">
           <children>
@@ -63,20 +72,7 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="537.0001220703125">
           <children>
-            <TabPane fx:id="tab" prefHeight="468.0" prefWidth="477.0" side="BOTTOM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <tabs>
-                <Tab text="Untitled Tab 1">
-                  <content>
-                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="437.0" prefWidth="537.0001220703125" />
-                  </content>
-                </Tab>
-                <Tab text="Untitled Tab 2">
-                  <content>
-                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </Tab>
-              </tabs>
-            </TabPane>
+            <TabPane fx:id="tab" prefHeight="468.0" prefWidth="477.0" side="BOTTOM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
       </items>

@@ -14,10 +14,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -38,6 +40,8 @@ public class Main extends Application {
             primaryStage.initStyle(StageStyle.UNDECORATED);
             
             primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image(getClass().getResource("/es/timmps/fac/gui/images/Icono.png").openStream()));
+            MainContext.setPrimaryStage(primaryStage);
             primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

@@ -42,7 +42,7 @@
         </Button>
       </items>
     </ToolBar>
-    <SplitPane fx:id="sppanel" dividerPositions="0.10027098912317255" focusTraversable="true" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
+    <SplitPane fx:id="sppanel" dividerPositions="0.08943088219093769" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="200.0">
           <children>
