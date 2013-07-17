@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -48,9 +50,11 @@ public class Usuarios implements Serializable {
     @Basic(optional = false)
     @Column(name = "PASSWORD")
     private String password;
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "usuariosCollection")
     private Collection<Grupos> gruposCollection;
-    @ManyToMany(mappedBy = "usuariosCollection", fetch = FetchType.EAGER )
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(mappedBy = "usuariosCollection")
     private Collection<Empresas> empresasCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<ProvPedidosCab> provPedidosCabCollection;

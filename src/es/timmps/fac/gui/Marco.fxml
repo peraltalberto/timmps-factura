@@ -8,7 +8,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" minHeight="515.0" prefHeight="564.0" prefWidth="740.0000999999975" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml" fx:controller="es.timmps.fac.gui.controlers.MarcoControllerFX">
+<AnchorPane id="AnchorPane" minHeight="515.0" prefHeight="564.0" prefWidth="740.0000999999975" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="es.timmps.fac.gui.controlers.MarcoControllerFX">
   <children>
     <MenuBar id="Menu" minHeight="14.0" prefHeight="21.0" prefWidth="601.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0">
       <menus>
@@ -42,11 +42,11 @@
         </Button>
       </items>
     </ToolBar>
-    <SplitPane fx:id="sppanel" dividerPositions="0.08943088219093769" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
+    <SplitPane fx:id="sppanel" dividerPositions="0.2073170450789919" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="470.0" prefWidth="740.0000999999975" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="52.0">
       <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="200.0">
+        <AnchorPane maxHeight="-1.0" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="468.0" prefWidth="150.0">
           <children>
-            <Accordion minWidth="122.0" prefHeight="468.0" prefWidth="147.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+            <Accordion minWidth="122.0" prefHeight="468.0" prefWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
               <expandedPane>
                 <TitledPane fx:id="x1" animated="false" minWidth="121.0" prefHeight="325.0" prefWidth="121.0" text="Comunes">
                   <content>

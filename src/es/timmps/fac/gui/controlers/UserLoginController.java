@@ -7,6 +7,7 @@ package es.timmps.fac.gui.controlers;
 import es.timmps.fac.MainContext;
 import es.timmps.fac.persistencia.CfGlobal;
 import es.timmps.fac.persistencia.Empresas;
+import es.timmps.fac.persistencia.Grupos;
 import es.timmps.fac.persistencia.Usuarios;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
@@ -105,63 +106,81 @@ public class UserLoginController implements Initializable {
             
          Usuarios usu = MainContext.getUsuarios().findUsuarios(this.txUser.getText());
         if(txPass.getText().equals(usu.getPassword())){
-            if(!usu.getEmpresasCollection().contains(cbEmpresas.getSelectionModel().getSelectedItem())){
-                txError.setText("Empresa no corresponde a tu nivel");
-            }else{
-                txError.setText("Todo Correcto cargando");
-                try {
-                    empDef.setValor(((Empresas)cbEmpresas.getSelectionModel().getSelectedItem()).getCodigo());
-                    MainContext.getGlobales().edit(empDef);
-                } catch (NonexistentEntityException ex) {
-                    Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                pbUser.setProgress(1);
-               
-                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/es/timmps/fac/gui/Marco.fxml"));
-             Parent  root = (Parent) fxmlLoader.load();
-            Scene scene = new Scene(root);
-             Stage st = new Stage();
-             st.setScene(scene);
-             
-    st.getIcons().addAll(MainContext.getPrimaryStage().getIcons());
-   st.widthProperty().addListener(new ChangeListener<Number>() {
-    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-        System.out.println("Width: " + newSceneWidth);
-    }
-
-                });
-st.heightProperty().addListener(new ChangeListener<Number>() {
-    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-        System.out.println("Height: " + newSceneHeight);
-    }
-});
-    
-             st.show();
-              Screen screen = Screen.getPrimary();
-    Rectangle2D bounds = screen.getVisualBounds();
-    st.setX(bounds.getMinX());
-    st.setY(bounds.getMinY());
-    st.setWidth(bounds.getWidth());
-    st.setHeight(bounds.getHeight());
-
-             MainContext.getPrimaryStage().close();
-             MainContext.setPrimaryStage(st);
+            if(!usu.getEmpresasCollection()
+                    .contains(cbEmpresas.getSelectionModel().getSelectedItem())){
                 
+                for(Grupos g :usu.getGruposCollection()){
+                   if(g.getEmpresasCollection()
+                           .contains(cbEmpresas.getSelectionModel()
+                           .getSelectedItem())){
+                      abrirApli();
+                      break;
+                   }
+                }
+            txError.setText("Empresa seleccionada no es correcta");
+            
+            }else{
+                abrirApli();
             }
         }else{
              txError.setText("Error de pass");
         }
         }catch(NullPointerException e){
             txError.setText("Nombre de usuario y contraseña Errorneo");
-        } catch (IOException ex) {
-            Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
         
         
     public void selEmpresa(){
        // System.exit(0);
+    }
+
+    private void abrirApli() {
+        try {
+            txError.setText("Todo Correcto cargando");
+                     try {
+                         empDef.setValor(((Empresas)cbEmpresas.getSelectionModel().getSelectedItem()).getCodigo());
+                         MainContext.getGlobales().edit(empDef);
+                     } catch (NonexistentEntityException ex) {
+                         Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                     } catch (Exception ex) {
+                         Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                     pbUser.setProgress(1);
+                    
+                      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/es/timmps/fac/gui/Marco.fxml"));
+                  Parent  root = (Parent) fxmlLoader.load();
+                 Scene scene = new Scene(root);
+                  Stage st = new Stage();
+                  st.setScene(scene);
+                  
+         st.getIcons().addAll(MainContext.getPrimaryStage().getIcons());
+        st.widthProperty().addListener(new ChangeListener<Number>() {
+         @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+             System.out.println("Width: " + newSceneWidth);
+         }
+
+                     });
+     st.heightProperty().addListener(new ChangeListener<Number>() {
+         @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+             System.out.println("Height: " + newSceneHeight);
+         }
+     });
+         st.setTitle("TIMMP´S FACTURAS");
+                  st.show();
+                   Screen screen = Screen.getPrimary();
+         Rectangle2D bounds = screen.getVisualBounds();
+         st.setX(bounds.getMinX());
+         st.setY(bounds.getMinY());
+         st.setWidth(bounds.getWidth());
+         st.setHeight(bounds.getHeight());
+
+                  MainContext.getPrimaryStage().close();
+                  MainContext.setPrimaryStage(st);
+        } catch (IOException ex) {
+            Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+            
     }
 }

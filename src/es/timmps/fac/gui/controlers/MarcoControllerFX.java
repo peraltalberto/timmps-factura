@@ -46,14 +46,18 @@ public class MarcoControllerFX implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        sppanel.setDividerPositions(0.1);
-        System.out.println(MainContext.getUsuarios().findUsuarios("aperalta").getPassword());
-    }    
+    
+        
+    }   
+    
+    
+     
     public void clic_b(ActionEvent evt){
+        System.out.println(sppanel.getDividerPositions()[0]);
         ObservableList<Tab> tabs = tab.getTabs();
         boolean singleton = true;
         for(Tab t : tabs){
-            if(t.getId().equals("CLIENTE")){
+            if(t.getId().equals("Admin_Usuarios")){
                 singleton = false;
                 SingleSelectionModel<Tab> sM = tab.getSelectionModel();
                 sM.select(t);
@@ -62,8 +66,8 @@ public class MarcoControllerFX implements Initializable {
         }
         if(singleton){
             try {
-                Tab t = new Tab("CLIENTES");
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/es/timmps/fac/gui/TabCliente.fxml"));
+                Tab t = new Tab("Admin_Usuarios");
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/es/timmps/fac/gui/TabUsuarios.fxml"));
                         AnchorPane  rt =  (AnchorPane) fxmlLoader.load();
                         t.setContent(rt);
                 tabs.add(t);

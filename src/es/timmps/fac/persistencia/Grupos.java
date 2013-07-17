@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -39,6 +42,7 @@ public class Grupos implements Serializable {
     @Basic(optional = false)
     @Column(name = "ACTIVO")
     private int activo;
+     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "gruposCollection")
     private Collection<Roles> rolesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupos")
@@ -62,6 +66,7 @@ public class Grupos implements Serializable {
         @JoinColumn(name = "USU", referencedColumnName = "ID")})
     @ManyToMany
     private Collection<Usuarios> usuariosCollection;
+     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "gruposCollection")
     private Collection<Empresas> empresasCollection;
 
