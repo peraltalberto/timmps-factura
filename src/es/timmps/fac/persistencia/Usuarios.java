@@ -36,6 +36,8 @@ import org.hibernate.annotations.LazyCollectionOption;
     @NamedQuery(name = "Usuarios.findById", query = "SELECT u FROM Usuarios u WHERE u.id = :id"),
     @NamedQuery(name = "Usuarios.findByPassword", query = "SELECT u FROM Usuarios u WHERE u.password = :password")})
 public class Usuarios implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Collection<Sessiones> sessionesCollection;
     @ManyToMany(mappedBy = "usuariosCollection")
     private Collection<Roles> rolesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
@@ -241,6 +243,15 @@ public class Usuarios implements Serializable {
 
     public void setEmpUsuCollection(Collection<EmpUsu> empUsuCollection) {
         this.empUsuCollection = empUsuCollection;
+    }
+
+    @XmlTransient
+    public Collection<Sessiones> getSessionesCollection() {
+        return sessionesCollection;
+    }
+
+    public void setSessionesCollection(Collection<Sessiones> sessionesCollection) {
+        this.sessionesCollection = sessionesCollection;
     }
     
 }

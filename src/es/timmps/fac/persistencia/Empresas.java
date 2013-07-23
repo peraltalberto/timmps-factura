@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresas.findByCodigo", query = "SELECT e FROM Empresas e WHERE e.codigo = :codigo"),
     @NamedQuery(name = "Empresas.findByCodigoPersona", query = "SELECT e FROM Empresas e WHERE e.codigoPersona = :codigoPersona")})
 public class Empresas implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+    private Collection<Sessiones> sessionesCollection;
     @Basic(optional = false)
     @Column(name = "ACTIVO")
     private int activo;
@@ -407,6 +409,15 @@ public class Empresas implements Serializable {
 
     public void setEmpUsuCollection(Collection<EmpUsu> empUsuCollection) {
         this.empUsuCollection = empUsuCollection;
+    }
+
+    @XmlTransient
+    public Collection<Sessiones> getSessionesCollection() {
+        return sessionesCollection;
+    }
+
+    public void setSessionesCollection(Collection<Sessiones> sessionesCollection) {
+        this.sessionesCollection = sessionesCollection;
     }
     
 }

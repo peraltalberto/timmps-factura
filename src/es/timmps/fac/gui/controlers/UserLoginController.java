@@ -11,6 +11,8 @@ import es.timmps.fac.persistencia.Grupos;
 import es.timmps.fac.persistencia.Usuarios;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
 import es.timmps.fac.persistencia.models.exceptions.PreexistingEntityException;
+import es.timmps.fac.util.Log;
+import es.timmps.fac.util.Log.LOG;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -104,8 +106,11 @@ public class UserLoginController implements Initializable {
        
         try{
             
-         Usuarios usu = MainContext.getUsuarios().findUsuarios(this.txUser.getText());
-        if(txPass.getText().equals(usu.getPassword())){
+         Usuarios usu = MainContext.getUsuarios().findUsuarios(this.txUser.getText().toUpperCase());
+         MainContext.setUsuario(usu);
+         MainContext.setEmpresa((Empresas) this.cbEmpresas.getSelectionModel().getSelectedItem());
+        if(txPass.getText().equals(usu.getPassword())
+                ){
             if(!usu.getEmpresasCollection()
                     .contains(cbEmpresas.getSelectionModel().getSelectedItem())){
                 
@@ -113,20 +118,26 @@ public class UserLoginController implements Initializable {
                    if(g.getEmpresasCollection()
                            .contains(cbEmpresas.getSelectionModel()
                            .getSelectedItem())){
+                       Log.Set(LOG.info, "Login realizado con empresa "+MainContext.getEmpresa().getCodigo());
                       abrirApli();
                       break;
                    }
                 }
+                Log.Set(LOG.info, "Empresa seleccionada no es correcta");
             txError.setText("Empresa seleccionada no es correcta");
             
             }else{
+                Log.Set(LOG.info, "Login realizado con empresa "+MainContext.getEmpresa().getCodigo());
                 abrirApli();
             }
         }else{
-             txError.setText("Error de pass");
+            Log.Set(LOG.info, "Nombre de uruario o contraseña erroneos");
+             txError.setText("Nombre de uruario o contraseña erroneos");
         }
         }catch(NullPointerException e){
-            txError.setText("Nombre de usuario y contraseña Errorneo");
+           MainContext.setUsuario(MainContext.getUsuarios().findUsuarios("ADMIN"));
+            Log.Set(LOG.info, "Nombre de usuario no encontrado "+txUser.getText());
+            txError.setText("Nombre de usuario no encontrado");
         }
     }
         

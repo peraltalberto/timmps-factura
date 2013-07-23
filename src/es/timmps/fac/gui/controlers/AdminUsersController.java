@@ -5,7 +5,6 @@
 package es.timmps.fac.gui.controlers;
 
 import es.timmps.fac.MainContext;
-import es.timmps.fac.gui.dialogs.OptionPaneFX;
 import es.timmps.fac.persistencia.DatosPersonales;
 import es.timmps.fac.persistencia.Usuarios;
 import java.net.URL;
@@ -15,12 +14,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
@@ -52,7 +53,11 @@ public class AdminUsersController implements Initializable {
     
     public void selectUser(MouseEvent e){
         if(e.getClickCount()>1){
-            OptionPaneFX.showMesage("Click en el usuario ");
-        }
+            Stage st = (Stage) rootP.getScene().getWindow();
+            System.out.println(st.getTitle());
+           Dialogs.showInformationDialog(st,
+                   "Usuario "+tabla.getSelectionModel().getSelectedItem().getId(), 
+                   "Esta haciendo doble clic en un usuario", "Atencion!!");
+         }
     }
 }

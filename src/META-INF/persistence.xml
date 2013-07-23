@@ -57,6 +57,7 @@
     <class>es.timmps.fac.persistencia.EmpUsu</class>
     <class>es.timmps.fac.persistencia.Roles</class>
     <class>es.timmps.fac.persistencia.Aplicaciones</class>
+    <class>es.timmps.fac.persistencia.Sessiones</class>
     <properties>
       <property name="hibernate.connection.username" value="root"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

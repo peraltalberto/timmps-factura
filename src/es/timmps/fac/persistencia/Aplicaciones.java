@@ -7,12 +7,14 @@ package es.timmps.fac.persistencia;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -33,6 +35,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Aplicaciones.findByDestino", query = "SELECT a FROM Aplicaciones a WHERE a.destino = :destino"),
     @NamedQuery(name = "Aplicaciones.findByTipo", query = "SELECT a FROM Aplicaciones a WHERE a.tipo = :tipo")})
 public class Aplicaciones implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "aplicacion")
+    private Collection<Sessiones> sessionesCollection;
+    @Basic(optional = false)
+    @Column(name = "IMAGEN")
+    private String imagen;
+    @Basic(optional = false)
+    @Column(name = "MENU")
+    private String menu;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -152,6 +162,31 @@ public class Aplicaciones implements Serializable {
     @Override
     public String toString() {
         return "es.timmps.fac.persistencia.Aplicaciones[ id=" + id + " ]";
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
+
+    @XmlTransient
+    public Collection<Sessiones> getSessionesCollection() {
+        return sessionesCollection;
+    }
+
+    public void setSessionesCollection(Collection<Sessiones> sessionesCollection) {
+        this.sessionesCollection = sessionesCollection;
     }
     
 }
