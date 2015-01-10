@@ -34,8 +34,10 @@ public class Encriptacion {
             if (hex.length() == 1) {
                 hexString.append('0');
             }
-            hexString.append(hex);
+            hexString.append(hex.toUpperCase());
+            
         }
-        return hexString.toString();
+        System.out.println(hexString.length() +"   "+hexString);
+        return hexString.toString().toUpperCase();
     }
 }

@@ -24,7 +24,7 @@ public class SessionControler {
             ses.setUsuario(usu);
             ses.setEmpresa(emp);
             ses.setInicio(new Date());
-            ses.setKey(Encriptacion.findMD5(usu.getId()+emp.getCodigo()+ses.getInicio()));
+            ses.setClave(Encriptacion.findMD5(usu.getId()+emp.getCodigo()+ses.getInicio()));
             return ses;
         } catch (Exception ex) {
             return null;

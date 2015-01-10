@@ -105,7 +105,7 @@ public class UserLoginController implements Initializable {
     public void aceptar(){
        
         try{
-            
+         System.out.println(MainContext.getSessiones().removeSessionesOld());
          Usuarios usu = MainContext.getUsuarios().findUsuarios(this.txUser.getText().toUpperCase());
          MainContext.setUsuario(usu);
          MainContext.setEmpresa((Empresas) this.cbEmpresas.getSelectionModel().getSelectedItem());
@@ -188,6 +188,8 @@ public class UserLoginController implements Initializable {
 
                   MainContext.getPrimaryStage().close();
                   MainContext.setPrimaryStage(st);
+                  
+                  
         } catch (IOException ex) {
             Logger.getLogger(UserLoginController.class.getName()).log(Level.SEVERE, null, ex);
         }

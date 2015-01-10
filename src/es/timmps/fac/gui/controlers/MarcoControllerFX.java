@@ -6,6 +6,7 @@ package es.timmps.fac.gui.controlers;
 
 import es.timmps.fac.MainContext;
 import es.timmps.fac.persistencia.models.UsuariosJpaController;
+import es.timmps.fac.secure.SessionControler;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.SplitPane;
@@ -40,14 +42,17 @@ public class MarcoControllerFX implements Initializable {
     private SplitPane sppanel;
     @FXML
     private  ProgressIndicator tabajando;
+    @FXML
+    private Accordion menuAplication;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    
-        
+       
+       MainContext.setSession(SessionControler.createSession(MainContext.getUsuario(),MainContext.getEmpresa()));
+       MainContext.getAplicationLoad().addAdministracion(menuAplication);
     }   
     
     

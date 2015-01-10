@@ -64,6 +64,7 @@
       <property name="hibernate.connection.password" value=""/>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/timmp_fac?zeroDateTimeBehavior=convertToNull"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="show_sql" value="true"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>
   </persistence-unit>

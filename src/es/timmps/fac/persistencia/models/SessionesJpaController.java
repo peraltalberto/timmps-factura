@@ -85,11 +85,11 @@ public class SessionesJpaController implements Serializable {
             Aplicaciones aplicacionOld = persistentSessiones.getAplicacion();
             Aplicaciones aplicacionNew = sessiones.getAplicacion();
             if (empresaNew != null) {
-                empresaNew = em.getReference(empresaNew.getClass(), empresaNew.getCodigo());
+                //empresaNew = em.getReference(empresaNew.getClass(), empresaNew.getCodigo());
                 sessiones.setEmpresa(empresaNew);
             }
             if (usuarioNew != null) {
-                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
+                //usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
                 sessiones.setUsuario(usuarioNew);
             }
             if (aplicacionNew != null) {
@@ -204,7 +204,17 @@ public class SessionesJpaController implements Serializable {
             em.close();
         }
     }
-
+ public int removeSessionesOld() {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            int lineas = em.createNativeQuery("DELETE FROM `timmp_fac`.`sessiones` WHERE `sessiones`.`ESTADO` = -1;").executeUpdate();
+            em.getTransaction().commit();
+            return lineas;
+        } finally {
+            em.close();
+        }
+    }
     public int getSessionesCount() {
         EntityManager em = getEntityManager();
         try {

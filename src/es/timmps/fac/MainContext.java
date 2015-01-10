@@ -4,6 +4,7 @@
  */
 package es.timmps.fac;
 
+import es.timmps.fac.core.AplicationLoad;
 import es.timmps.fac.persistencia.Empresas;
 import es.timmps.fac.persistencia.Sessiones;
 import es.timmps.fac.persistencia.Usuarios;
@@ -15,6 +16,7 @@ import es.timmps.fac.persistencia.models.SessionesJpaController;
 import es.timmps.fac.persistencia.models.TipoLogJpaController;
 import es.timmps.fac.persistencia.models.UsuariosJpaController;
 import es.timmps.fac.persistencia.models.exceptions.NonexistentEntityException;
+
 import es.timmps.fac.util.Log;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +44,9 @@ public class MainContext {
     private static Empresas empresa = null;
     private static Sessiones session = null;
     private static Stage primaryStage = null;
+    private static AplicationLoad aplicationLoad  = null;
+    
+    
     public static EntityManagerFactory getEmf() {
         if(emf == null)
             emf = Persistence.createEntityManagerFactory("fratimmpPU");
@@ -127,12 +132,16 @@ public class MainContext {
             @Override
             public void handle(WindowEvent t) {
                 if(session != null){
-                    try {
+                   try {
                         Log.Set(Log.LOG.info, "Salida de el programa del usuario :"+usuario.getId());
-                        sessiones.destroy(session.getId());
-                    } catch (NonexistentEntityException ex) {
-                       Log.Set(Log.LOG.info, "Salida del programa con errores");
-                    }
+                            session.setEstado(-1);
+                       
+                           sessiones.edit(session);
+                       
+                        } catch (Exception ex) {
+                            Logger.getLogger(MainContext.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                   
                 }else{
                     
                     Log.Set(Log.LOG.info, "Salida de el programa sin sesion ");
@@ -175,6 +184,18 @@ public class MainContext {
 
     public static void setSession(Sessiones session) {
         MainContext.session = session;
+        MainContext.getSessiones().create(session);
+    }
+
+    public static AplicationLoad getAplicationLoad() {
+         if(aplicationLoad == null)
+            aplicationLoad = new AplicationLoad();
+        
+        return aplicationLoad;
+    }
+
+    public static void setAplicationLoad(AplicationLoad aplicationLoad) {
+        MainContext.aplicationLoad = aplicationLoad;
     }
   
   

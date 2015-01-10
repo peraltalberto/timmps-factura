@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresas.findByCodigo", query = "SELECT e FROM Empresas e WHERE e.codigo = :codigo"),
     @NamedQuery(name = "Empresas.findByCodigoPersona", query = "SELECT e FROM Empresas e WHERE e.codigoPersona = :codigoPersona")})
 public class Empresas implements Serializable {
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
     private Collection<Sessiones> sessionesCollection;
     @Basic(optional = false)

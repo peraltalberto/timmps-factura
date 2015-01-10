@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -31,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Sessiones.findAll", query = "SELECT s FROM Sessiones s"),
     @NamedQuery(name = "Sessiones.findById", query = "SELECT s FROM Sessiones s WHERE s.id = :id"),
-    @NamedQuery(name = "Sessiones.findByKey", query = "SELECT s FROM Sessiones s WHERE s.key = :key"),
+    @NamedQuery(name = "Sessiones.findByClave", query = "SELECT s FROM Sessiones s WHERE s.clave = :clave"),
     @NamedQuery(name = "Sessiones.findByInicio", query = "SELECT s FROM Sessiones s WHERE s.inicio = :inicio"),
     @NamedQuery(name = "Sessiones.findByEstado", query = "SELECT s FROM Sessiones s WHERE s.estado = :estado")})
 public class Sessiones implements Serializable {
@@ -42,8 +44,8 @@ public class Sessiones implements Serializable {
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "KEY")
-    private String key;
+    @Column(name = "CLAVE")
+    private String clave;
     @Basic(optional = false)
     @Column(name = "INICIO")
     @Temporal(TemporalType.TIMESTAMP)
@@ -52,13 +54,16 @@ public class Sessiones implements Serializable {
     @Column(name = "ESTADO")
     private int estado;
     @JoinColumn(name = "EMPRESA", referencedColumnName = "CODIGO")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(optional = false)
     private Empresas empresa;
     @JoinColumn(name = "USUARIO", referencedColumnName = "ID")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(optional = false)
     private Usuarios usuario;
     @JoinColumn(name = "APLICACION", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToOne(optional = true)
     private Aplicaciones aplicacion;
 
     public Sessiones() {
@@ -70,7 +75,7 @@ public class Sessiones implements Serializable {
 
     public Sessiones(Integer id, String key, Date inicio, int estado) {
         this.id = id;
-        this.key = key;
+        this.clave = key;
         this.inicio = inicio;
         this.estado = estado;
     }
@@ -83,12 +88,12 @@ public class Sessiones implements Serializable {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getClave() {
+        return clave;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setClave(String key) {
+        this.clave = key;
     }
 
     public Date getInicio() {
