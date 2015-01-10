@@ -15,6 +15,7 @@ import javafx.scene.layout.VBoxBuilder;
  */
 public class AplicationLoad {
     
+    
     public AplicationLoad(){
     
     }
